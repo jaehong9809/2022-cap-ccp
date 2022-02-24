@@ -19,6 +19,7 @@
             android:layout_margin="2dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/tomainpagebt"
             android:text="메인"
             ></Button>
         <Button
@@ -26,6 +27,7 @@
             android:layout_margin="2dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/touserpagebt"
             android:text="사용자 정보"
             ></Button>
         <Button
@@ -33,6 +35,7 @@
             android:layout_margin="2dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:id="@+id/toinfopagebt"
             android:text="데이터 정보"
             ></Button>
     </LinearLayout>
