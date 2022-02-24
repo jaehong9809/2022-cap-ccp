@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sexlist">
+        <item>남자</item>
+        <item>여자</item>
+    </string-array>
+
+    <integer-array name="weightlist">
+        <item>30</item>
+    </integer-array>
+
+    <string-array name="spitime">
+        <item>아침</item>
+        <item>점심</item>
+        <item>저녁</item>
+        <item>야식</item>
+        <item>간식</item>
+    </string-array>
+</resources>
