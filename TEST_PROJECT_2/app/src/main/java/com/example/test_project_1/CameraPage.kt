@@ -77,6 +77,7 @@ class CameraPage: AppCompatActivity() {
             var picture = retrofit.create(Picture::class.java)
             var imageView: ImageView = findViewById(R.id.imageView)
             var calorie: TextView = findViewById(R.id.calorie)
+            var btn: Button = findViewById(R.id.btn)
 
             picture.requestPicture(image).enqueue(object : Callback<Cal> {
                 override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
@@ -87,6 +88,14 @@ class CameraPage: AppCompatActivity() {
                         val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                         imageView.setImageBitmap(image)
                         calorie.text = login?.msg
+
+                        btn.setOnClickListener {
+                            var outIntent = Intent(applicationContext, CalendarPage::class.java)
+                            outIntent.putExtra("cal", login?.msg)
+                            setResult(Activity.RESULT_OK, outIntent)
+                            finish()
+                        }
+
                     } else {
                         Toast.makeText(applicationContext, "실패", Toast.LENGTH_SHORT).show()
                     }

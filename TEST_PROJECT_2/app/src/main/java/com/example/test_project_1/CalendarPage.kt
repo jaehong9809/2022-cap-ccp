@@ -46,7 +46,7 @@ class CalendarPage : Fragment() {
         var camera_btn: Button = view.findViewById(R.id.camera_btn)
         camera_btn.setOnClickListener {
             val intent = Intent(getActivity(), CameraPage::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 0)
         }
 
         var cal= Calendar.getInstance()
@@ -56,5 +56,13 @@ class CalendarPage : Fragment() {
         tv1.text=Integer.toString(cyear)+"_"+Integer.toString(cmonth+1)+"_"+Integer.toString(cday)
 
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            var cal = data!!.getStringExtra("cal")
+            Toast.makeText(getActivity(), cal, Toast.LENGTH_SHORT).show()
+        }
     }
 }
