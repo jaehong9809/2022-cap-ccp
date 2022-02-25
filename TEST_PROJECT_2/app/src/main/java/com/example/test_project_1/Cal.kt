@@ -1,4 +1,7 @@
 package com.example.test_project_1
 
-class Cal {
-}
+data class Cal(
+    var code : String,
+    var msg : String,
+    var img : String
+)
