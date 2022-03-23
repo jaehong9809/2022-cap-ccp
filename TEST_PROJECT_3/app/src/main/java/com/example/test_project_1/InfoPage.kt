@@ -8,14 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.ColorTemplate.COLORFUL_COLORS
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,12 +35,18 @@ class InfoPage : Fragment() {
     lateinit var sp2:Spinner
     lateinit var sp3:Spinner
     lateinit var sp4:Spinner
-    lateinit var sp5: Spinner
-    lateinit var sp6:Spinner
-    lateinit var sp7:Spinner
-    lateinit var sp8:Spinner
     lateinit var piechart1:PieChart
-    lateinit var piechart2:PieChart
+    lateinit var barchart1:BarChart
+    lateinit var linechart1:LineChart
+    lateinit var monthavgcal:Array<Array<String>>
+    lateinit var agecalavglist:Array<String>
+
+    var retrofit = Retrofit.Builder()
+        .baseUrl("http://192.168.35.118:8000")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    var dataInfo = retrofit.create(DataInfo::class.java)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,47 +58,68 @@ class InfoPage : Fragment() {
         sp2=view.findViewById(R.id.sp2)
         sp3=view.findViewById(R.id.sp3)
         sp4=view.findViewById(R.id.sp4)
-        sp5=view.findViewById(R.id.sp5)
-        sp6=view.findViewById(R.id.sp6)
-        sp7=view.findViewById(R.id.sp7)
-        sp8=view.findViewById(R.id.sp8)
 
         piechart1=view.findViewById(R.id.pichart1)
-        piechart2=view.findViewById(R.id.pichart2)
+        barchart1=view.findViewById(R.id.barchart1)
+        linechart1=view.findViewById(R.id.linechart1)
 
-        var sexlist= mutableListOf<String>("   남", "   여")
+        //------------------------통신-----------------------------------by heegang
+        dataInfo.searchData().enqueue(object: Callback<Data>{
+            override fun onResponse(call: Call<Data>, response: Response<Data>) {
+                var result = response.body()
+                if(result?.code == "0000"){
+                    println(result.monthavgcal[1][1])
+                    println(result.agecalavglist[1])
+                    //println(agecalavglist[1])
+                    //println(monthavgcal[1][1])
+                }
+                else
+                    Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<Data>, t: Throwable) {
+                Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+        //-----------------------통신끝----------------------------------------------
+
+
+
+        var sexlist= mutableListOf<String>("  남", "  여")
         var ada1:ArrayAdapter<String>
         ada1= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, sexlist)     //성별 스피너
         sp1.adapter=ada1
-        sp5.adapter=ada1
+
 
 
         var weightlist= mutableListOf<String>()
         for(i in 30..120){
-            weightlist.add("   "+i.toString())
+            weightlist.add(i.toString())
         }
         var ada2:ArrayAdapter<String>
         ada2= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, weightlist)     //몸무게스피너
         sp2.adapter=ada2
-        sp6.adapter=ada2
+
 
         var heightlist= mutableListOf<String>()
         var ada3:ArrayAdapter<String>
         for(i in 100..200){
-            heightlist.add(" "+i.toString())
+            heightlist.add(i.toString())
         }
         ada3=ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, heightlist)      // 키 스피너
         sp3.adapter=ada3
-        sp7.adapter=ada3
+
 
         var agelist= mutableListOf<String>()
         for(i in 1..100){
-            agelist.add("   "+i.toString())
+            agelist.add(i.toString())
         }
         var ada4: ArrayAdapter<String>
         ada4= ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, agelist)        //나이 스피너
         sp4.adapter=ada4
-        sp8.adapter=ada4
+
 
         var usersfood= mutableListOf<userFood>()
         val random= Random()
@@ -111,7 +146,39 @@ class InfoPage : Fragment() {
         entries.add(PieEntry((foodcnt.japchae).toFloat(), "JAPCHAE"))
 
         makepiechart(piechart1, entries)
-        makepiechart(piechart2, entries)
+
+        val entriesa= ArrayList<BarEntry>()
+        entriesa.add(BarEntry(0f, 0f))
+        entriesa.add(BarEntry(1f, 1000f))
+        entriesa.add(BarEntry(2f, 1200f))
+        entriesa.add(BarEntry(3f, 900f))       //0인덱스는 뺴야할듯
+        entriesa.add(BarEntry(4f, 1400f))
+        entriesa.add(BarEntry(5f, 1000f))
+        entriesa.add(BarEntry(6f, 1200f))
+        entriesa.add(BarEntry(7f, 1300f))
+        entriesa.add(BarEntry(8f, 800f))
+
+
+        makechart(barchart1, entriesa)
+
+        val entriesq= ArrayList<Entry>()
+        entriesq.add(Entry(0f, 900f))
+        entriesq.add(Entry(1f, 1200f))
+        entriesq.add(Entry(2f, 1100f))
+        entriesq.add(Entry(3f, 1500f))       //0인덱스는 뺴야할듯
+        entriesq.add(Entry(4f, 1300f))
+        entriesq.add(Entry(5f, 800f))
+        entriesq.add(Entry(6f, 2000f))
+        entriesq.add(Entry(7f, 1200f))
+        entriesq.add(Entry(8f, 1500f))
+        entriesq.add(Entry(9f, 400f))
+        entriesq.add(Entry(10f, 1400f))
+        entriesq.add(Entry(11f, 1000f))
+
+
+
+
+        makelinechart(linechart1, entriesq)
 
         return view
     }
@@ -144,4 +211,152 @@ class InfoPage : Fragment() {
             animate()
         }
     }
+    fun makechart(chart1: BarChart, entries: ArrayList<BarEntry>){
+        val age=ArrayList<String>()
+        age.add("")
+        for( i in 0..7){
+            age.add((i+1).toString()+"0대")
+        }
+        val bardataset= BarDataSet(entries, "Mybardataset")
+        bardataset.valueTextSize=12f
+        bardataset.setColor(Color.CYAN, 150)
+        val bardata= BarData(bardataset)
+        bardata.barWidth=0.2f
+
+        chart1.run(){
+            setDrawBarShadow(false)
+            legend.isEnabled=false
+        }
+        val xaxis=chart1.xAxis
+        xaxis.setDrawLabels(true)
+
+
+
+        xaxis.valueFormatter=object: ValueFormatter(){
+            override fun getFormattedValue(value: Float): String {
+                return age[value.toInt()]
+            }
+        }
+
+        xaxis.textColor=Color.BLACK
+        xaxis.position= XAxis.XAxisPosition.BOTTOM
+        xaxis.setDrawLabels(true)
+        xaxis.setDrawAxisLine(true)
+        xaxis.axisMinimum=0f
+        xaxis.labelCount=8
+
+        var max:Int=0
+        var min:Int=10000
+        for( i in entries){
+            if(i.x==0f)continue
+
+            if(i.y>max)
+                max=i.y.toInt()
+            if(i.y<min)
+                min=i.y.toInt()
+        }
+        if((min-100)<0)
+            min=0
+        val ylaxis=chart1.axisLeft
+        ylaxis.axisMaximum=(max+100).toFloat()
+        ylaxis.axisMinimum=(min-100).toFloat()
+
+        ylaxis.setDrawAxisLine(false)
+        ylaxis.setDrawGridLines(false)
+
+        val yraxis=chart1.axisRight
+        yraxis.setDrawLabels(false)
+        yraxis.setDrawAxisLine(false)
+        yraxis.setDrawGridLines(false)
+        chart1.setScaleEnabled(false)
+        chart1.setPinchZoom(false)
+        chart1.description=null
+        xaxis.setDrawGridLines(false)
+
+        chart1.animateXY(0, 800)
+        chart1.data=bardata
+        chart1.invalidate()
+    }
+
+    fun makelinechart(chart1: LineChart, entries: ArrayList<Entry>){
+        val age=ArrayList<String>()
+        age.add("1월")
+        age.add("2월")
+        age.add("3월")
+        age.add("4월")
+        age.add("5월")
+        age.add("6월")
+        age.add("7월")
+        age.add("8월")
+        age.add("9월")
+        age.add("10월")
+        age.add("11월")
+        age.add("12월")
+
+
+        val bardataset= LineDataSet(entries, "Mybardataset")
+
+        bardataset.setColor(Color.CYAN, 150)
+        bardataset.setDrawCircleHole(false)
+        bardataset.lineWidth=2f
+        bardataset.circleRadius=5f
+        bardataset.valueTextSize=12f
+        val bardata= LineData(bardataset)
+
+
+        chart1.run(){
+
+            legend.isEnabled=false
+        }
+        val xaxis=chart1.xAxis
+        xaxis.setDrawLabels(true)
+
+
+
+        xaxis.valueFormatter=object: ValueFormatter(){
+            override fun getFormattedValue(value: Float): String {
+                return age[value.toInt()]
+            }
+        }
+
+        xaxis.textColor=Color.BLACK
+        xaxis.position= XAxis.XAxisPosition.BOTTOM
+        xaxis.setDrawLabels(true)
+        xaxis.setDrawAxisLine(true)
+        xaxis.axisMinimum=0f
+        xaxis.labelCount=8
+
+        var max:Int=0
+        var min:Int=10000
+        for( i in entries){
+
+            if(i.y>max)
+                max=i.y.toInt()
+            if(i.y<min)
+                min=i.y.toInt()
+        }
+        if((min-100)<0)
+            min=0
+        val ylaxis=chart1.axisLeft
+        ylaxis.axisMaximum=(max+100).toFloat()
+        ylaxis.axisMinimum=(min-100).toFloat()
+
+        ylaxis.setDrawAxisLine(false)
+        ylaxis.setDrawGridLines(false)
+
+        val yraxis=chart1.axisRight
+        yraxis.setDrawLabels(false)
+        yraxis.setDrawAxisLine(false)
+        yraxis.setDrawGridLines(false)
+        chart1.setScaleEnabled(false)
+        chart1.setPinchZoom(false)
+        chart1.description=null
+        xaxis.setDrawGridLines(false)
+
+        chart1.animateXY(0, 800)
+        chart1.data=bardata
+        chart1.invalidate()
+    }
+
+
 }

@@ -7,9 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.test_project_1.login.Login
 import com.example.test_project_1.login.LoginService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -39,22 +44,27 @@ class LoginPage : AppCompatActivity() {
         }
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.27:8000")
+            .baseUrl("http://192.168.35.118:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         var loginService = retrofit.create(LoginService::class.java)
 
         login_btn.setOnClickListener {
-            /*var textId = ID.text.toString()
+            var textId = ID.text.toString()
             var textPw = PW.text.toString()
 
-            loginService.requestLogin(textId, textPw).enqueue(object: Callback<Login>{
+            loginService.requestLogin(textId, textPw).enqueue(object: Callback<Login> {
                 override fun onResponse(call: Call<Login>, response: Response<Login>) {
                     var login = response.body()
                     if(login?.code == "0000"){
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         var intent= Intent(applicationContext, MainActivity::class.java)
+                        intent.putExtra("textId", textId)
+                        intent.putExtra("sex", login?.sex)
+                        intent.putExtra("weight", login?.weight)
+                        intent.putExtra("height", login?.height)
+                        intent.putExtra("age", login?.age)
                         startActivity(intent)
                     }
                     else{
@@ -66,9 +76,9 @@ class LoginPage : AppCompatActivity() {
                     Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
                 }
 
-            })*/
-            var intent= Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
+            })
+            /*var intent= Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)*/
         }
     }
 

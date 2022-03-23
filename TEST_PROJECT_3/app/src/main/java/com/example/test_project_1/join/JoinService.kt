@@ -14,6 +14,7 @@ interface JoinService {
         @Field("password") password:String,
         @Field("age") age:Int,
         @Field("sex") sex:String,
+        @Field("height") height:Int,
         @Field("weight") weight:Int
     ) : Call<Login>
 }

@@ -26,10 +26,11 @@ class JoinPage : AppCompatActivity() {
         var username: EditText = findViewById(R.id.username)
         var password1: EditText = findViewById(R.id.password1)
         var age: EditText = findViewById(R.id.age)
+        var height: EditText = findViewById(R.id.height)
         var weight: EditText = findViewById(R.id.weight)
 
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.27:8000")
+            .baseUrl("http://192.168.35.118:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -47,10 +48,11 @@ class JoinPage : AppCompatActivity() {
             var username = username.text.toString()
             var password = password1.text.toString()
             var age = Integer.parseInt(age.text.toString())
+            var height = Integer.parseInt(height.text.toString())
             var weight = Integer.parseInt(weight.text.toString())
 
 
-            joinService.requestJoin(username, password, age, sex, weight).enqueue(object:Callback<Login>{
+            joinService.requestJoin(username, password, age, sex, height, weight).enqueue(object:Callback<Login>{
                 override fun onResponse(call: Call<Login>, response: Response<Login>) {
                     var join = response.body()
                     if (join?.code == "0000"){

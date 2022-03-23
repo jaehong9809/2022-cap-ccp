@@ -9,11 +9,30 @@
         <item>30</item>
     </integer-array>
 
-    <string-array name="spitime">
+    <string-array name="dietname">
+        <item>라면</item>
+        <item>김치</item>
+        <item>떡볶이</item>
+        <item>돈까스</item>
+        <item>냉면</item>
+        <item>닭갈비</item>
+        <item>스테이크</item>
+        <item>짬뽕밥</item>
+        <item>단팥죽</item>
+        <item>치킨</item>
+        <item>피자</item>
+    </string-array>
+
+    <string-array name="dietunit">
+        <item>g</item>
+        <item>인분</item>
+    </string-array>
+
+    <string-array name="diettime">
         <item>아침</item>
         <item>점심</item>
         <item>저녁</item>
-        <item>야식</item>
         <item>간식</item>
+        <item>야식</item>
     </string-array>
 </resources>

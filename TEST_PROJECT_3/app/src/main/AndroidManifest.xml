@@ -20,11 +20,6 @@
             android:name=".InfoPage"
             android:exported="false" />
         <activity
-            android:name=".InformationPage"
-            android:exported="false"
-            android:label="@string/title_activity_information_page"
-            android:theme="@style/NoActionBar" />
-        <activity
             android:name=".UserPage"
             android:exported="false"
             android:label="@string/title_activity_user_page"
@@ -38,6 +33,8 @@
         <activity
             android:name=".CameraPage"
             android:exported="false" />
+        <activity android:name=".AddPage"
+            android:exported="false"/>
         <activity
             android:name=".LoginPage"
             android:exported="true">

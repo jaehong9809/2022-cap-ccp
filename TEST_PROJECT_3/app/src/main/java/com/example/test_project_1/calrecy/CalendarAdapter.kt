@@ -1,14 +1,12 @@
 package com.example.test_project_1.calrecy
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test_project_1.R
 import com.example.test_project_1.databinding.CalendarItemBinding
-import com.example.test_project_1.foodrecy.Foodmodel
 
 
 class CalendarAdapter(private val listener: (calendarDateModel: CalendarDateModel, position: Int) -> Unit) :

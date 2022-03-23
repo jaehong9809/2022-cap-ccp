@@ -10,18 +10,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import java.util.*
 
 class UserPage : Fragment() {
     data class dayCalorie(var day:String, var calorie:Int)  //날짜, 칼로리 클래스
     data class userData(var name:String, var age:Int, var weight:Int, var sex:String, var daesa:Int, var height:Int)
-    lateinit var chart1:BarChart
-    lateinit var chart2:BarChart
+    lateinit var chart1:LineChart
+    lateinit var chart2:LineChart
     lateinit var agetv:TextView
     lateinit var weight:TextView
     lateinit var sextv:TextView
@@ -48,7 +47,7 @@ class UserPage : Fragment() {
         daesatv=view.findViewById(R.id.daesatv)
         heighttv=view.findViewById(R.id.heighttv)
         username=view.findViewById(R.id.username)
-        modifybt=view.findViewById(R.id.modifybt)
+        // modifybt=view.findViewById(R.id.modifybt)
         var userone=userData("홍길동",25, 69, "남", 1700, 173)
         var qq=((userone.weight)/((userone.height*0.01)*(userone.height*0.01))).toInt()
         agetv.text=Integer.toString(userone.age)
@@ -60,9 +59,9 @@ class UserPage : Fragment() {
         bmitv.text=qq.toString()
 
 
-        modifybt.setOnClickListener {
-            Toast.makeText(requireContext(), "수정어케하지", Toast.LENGTH_LONG).show()
-        }
+        /*  modifybt.setOnClickListener {
+              Toast.makeText(requireContext(), "수정어케하지", Toast.LENGTH_LONG).show()
+          }*/
 
 
         var cal= Calendar.getInstance()      //오늘날짜
@@ -84,19 +83,18 @@ class UserPage : Fragment() {
 
         return view
     }
-    fun makechart(chart1: BarChart, entries: ArrayList<dayCalorie>, daynum:Int){
-        val entryList= mutableListOf<BarEntry>()
+    fun makechart(chart1: LineChart, entries: ArrayList<dayCalorie>, daynum:Int){
+        val entryList= mutableListOf<Entry>()
         for(i in 1..daynum){
-            entryList.add(BarEntry(i.toFloat(), entries[i-1].calorie.toFloat()))
+            entryList.add(Entry(i.toFloat(), entries[i-1].calorie.toFloat()))
         }
-        val bardataset=BarDataSet(entryList, "Mybardataset")
+        val bardataset= LineDataSet(entryList, "Mybardataset")
+        bardataset.setDrawCircleHole(false)
+        bardataset.setColor(Color.CYAN, 150)
+        val bardata= LineData(bardataset)
 
-        bardataset.setColor(Color.GREEN, 150)
-        val bardata= BarData(bardataset)
-        bardata.barWidth=0.2f
 
         chart1.run(){
-            setDrawBarShadow(false)
             legend.isEnabled=false
         }
         val xaxis=chart1.xAxis
