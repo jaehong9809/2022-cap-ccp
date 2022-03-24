@@ -85,7 +85,7 @@ class CalendarPage : Fragment() {
         calrecyview = view.findViewById(R.id.recy_date)
         foodrecyview = view.findViewById(R.id.recyview)
 
-        var mDatas: ArrayList<FoodModel> = requireActivity().intent!!.extras!!.get("DataList") as ArrayList<FoodModel>
+
         mDatas = requireActivity().intent!!.extras!!.get("DataList") as ArrayList<FoodModel>
         textId = requireActivity().intent!!.extras!!.get("textId") as String
         var sex = requireActivity().intent!!.extras!!.get("sex") as String
