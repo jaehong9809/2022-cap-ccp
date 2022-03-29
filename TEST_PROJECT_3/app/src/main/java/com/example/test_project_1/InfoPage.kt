@@ -174,11 +174,15 @@ class InfoPage : Fragment() {
 
                 sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        dataInfo2.search(sex, height, weight, age).enqueue(object : Callback<Data2>{
+                        dataInfo2.search(sp1.selectedItem.toString(), sp3.selectedItem.toString().toInt(), sp2.selectedItem.toString().toInt(), sp4.selectedItem.toString().toInt()).enqueue(object : Callback<Data2>{
                             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                                 var result = response.body()
                                 if(result?.code =="0000"){
-                                    result.info
+                                    var foods = result.info
+                                    for (i in foods){
+                                        println(i[0])
+                                        println(i[1])
+                                    }
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -197,11 +201,15 @@ class InfoPage : Fragment() {
                 }
                 sp2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        dataInfo2.search(sex, height, weight, age).enqueue(object : Callback<Data2>{
+                        dataInfo2.search(sp1.selectedItem.toString(), sp3.selectedItem.toString().toInt(), sp2.selectedItem.toString().toInt(), sp4.selectedItem.toString().toInt()).enqueue(object : Callback<Data2>{
                             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                                 var result = response.body()
                                 if(result?.code =="0000"){
-                                    result.info
+                                    var foods = result.info
+                                    for (i in foods){
+                                        println(i[0])
+                                        println(i[1])
+                                    }
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -220,11 +228,15 @@ class InfoPage : Fragment() {
                 }
                 sp3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        dataInfo2.search(sex, height, weight, age).enqueue(object : Callback<Data2>{
+                        dataInfo2.search(sp1.selectedItem.toString(), sp3.selectedItem.toString().toInt(), sp2.selectedItem.toString().toInt(), sp4.selectedItem.toString().toInt()).enqueue(object : Callback<Data2>{
                             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                                 var result = response.body()
                                 if(result?.code =="0000"){
-                                    result.info
+                                    var foods = result.info
+                                    for (i in foods){
+                                        println(i[0])
+                                        println(i[1])
+                                    }
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -243,11 +255,15 @@ class InfoPage : Fragment() {
                 }
                 sp4.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        dataInfo2.search(sex, height, weight, age).enqueue(object : Callback<Data2>{
+                        dataInfo2.search(sp1.selectedItem.toString(), sp3.selectedItem.toString().toInt(), sp2.selectedItem.toString().toInt(), sp4.selectedItem.toString().toInt()).enqueue(object : Callback<Data2>{
                             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                                 var result = response.body()
                                 if(result?.code =="0000"){
-                                    result.info
+                                    var foods = result.info
+                                    for (i in foods){
+                                        println(i[0])
+                                        println(i[1])
+                                    }
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()

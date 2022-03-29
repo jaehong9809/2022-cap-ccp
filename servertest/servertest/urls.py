@@ -23,5 +23,7 @@ urlpatterns = [
     path('login/', views.login),
     path('calculate/', views.calculate),
     path('food/', views.food),
-    path('datainfo/', views.datainfo)
+    path('datainfo/', views.datainfo),
+    path('datainfo2/', views.datainfo2),
+    path('userinfo/', views.userinfo)
 ]

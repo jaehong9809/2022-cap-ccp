@@ -138,3 +138,6 @@ agecalavglist.append(age60avgcal)
 agecalavglist.append(age70avgcal)
 agecalavglist.append(age80avgcal)
 print(agecalavglist)
+
+db.commit()
+db.close()

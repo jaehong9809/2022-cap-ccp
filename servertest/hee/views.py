@@ -6,8 +6,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 import yolo
 import pymysql
-import os
 import datamod
+import datetime
 
 
 @csrf_exempt
@@ -46,6 +46,9 @@ def login(request):
             sql = "select sex, weight, height, age from user where username = %s"
             cursor.execute(sql, id)
             result = cursor.fetchall()
+
+            db.commit()
+            db.close()
 
             return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
                                  'age': result[0][3]}, status=200)
@@ -88,6 +91,9 @@ def food(request):
         cursor.execute(sql, (userid, "%"+time))
         result = cursor.fetchall()
 
+        db.commit()
+        db.close()
+
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
@@ -102,3 +108,118 @@ def datainfo(request):
         datamod.monthavgcal
 
         return JsonResponse({'code': '0000', 'agecalavglist':datamod.agecalavglist, 'monthavgcal':datamod.monthavgcal}, status=200)
+
+
+@csrf_exempt
+def datainfo2(request):
+    if request.method == 'POST':
+        sex = request.POST.get('sex', '')
+        height = int(request.POST.get('height'))
+        weight = int(request.POST.get('weight'))
+        age = int(request.POST.get('age'))
+
+
+        if sex == "  남":
+            sex = 'M'
+        elif sex == "  여":
+            sex = 'F'
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "select food_name from user_food where sex = %s and height between %s and %s and " \
+              "weight between %s and %s and age between %s and %s"
+        cursor.execute(sql, (sex, height, height+9, weight, weight+9, age, age+9))
+        result = cursor.fetchall()
+
+        foodcnt = {}
+        for i in result:
+            if i[0] in foodcnt:
+                foodcnt[i[0]] += 1
+            else:
+                foodcnt[i[0]] = 1
+
+        tmp1 = list(foodcnt)
+        tmp2 = list(foodcnt.values())
+        foodcntlist = []  # 리스트로 만들기
+        for i in range(len(tmp1)):
+            foodcntlist.append([tmp1[i], tmp2[i]])
+        foodcntlist.sort(key=lambda x: -x[1])
+        sendfood = []
+
+        if len(foodcntlist) > 5:
+            for i in range(0, 5):
+                sendfood.append([foodcntlist[i][0], foodcntlist[i][1]])
+        else:
+            sendfood = foodcntlist
+        print(foodcntlist)
+        print(foodcnt)
+        print(sex, height, weight, age)
+
+        db.commit()
+        db.close()
+
+        return JsonResponse({'code': '0000', 'info': sendfood}, status=200)
+
+
+@csrf_exempt
+def userinfo(request):
+    if request.method == 'POST':
+        id = request.POST.get('id', '')
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "select tim, calorie from user_food where user = %s"
+        cursor.execute(sql, id)
+        result = cursor.fetchall()
+
+        userdaycal15 = {}  # 날짜/ 칼로리
+        userdaycal30 = {}
+        now = datetime.datetime.now()
+
+        for i in range(1, 16):
+            tmp = now - datetime.timedelta(days=i)
+            da = tmp.strftime(("%Y%m%d"))
+            userdaycal15[da] = 0
+
+        for i in range(1, 31):
+            tmp = now - datetime.timedelta(days=i)
+            da = tmp.strftime(("%Y%m%d"))
+            userdaycal30[da] = 0
+
+        for i in result:
+            a = str(i[0])
+            date = a[:8]
+            if (date in userdaycal15):
+                userdaycal15[date] += i[1]
+        tmp1 = list(userdaycal15)
+        tmp2 = list(userdaycal15.values())
+        userdaycallist15 = []  # 리스트로 만들기
+        for i in range(len(tmp1)):
+            userdaycallist15.append([tmp1[i], tmp2[i]])
+        print(userdaycallist15)
+        userdaycallist30 = []
+        for i in result:
+            a = str(i[0])
+            date = a[:8]
+            if (date in userdaycal30):
+                userdaycal30[date] += i[1]
+        tmp1 = list(userdaycal30)
+        tmp2 = list(userdaycal30.values())
+
+        for i in range(len(tmp1)):
+            userdaycallist30.append([tmp1[i], tmp2[i]])
+
+        return JsonResponse({'code': '0000', 'day15': userdaycallist15, 'day30': userdaycallist30}, status=200)
+

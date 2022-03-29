@@ -14,6 +14,11 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class UserPage : Fragment() {
@@ -57,6 +62,39 @@ class UserPage : Fragment() {
         heighttv.text=Integer.toString(userone.height)
         username.text=userone.name
         bmitv.text=qq.toString()
+
+        var id = requireActivity().intent!!.extras!!.get("textId") as String
+
+        var retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.35.118:8000")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        var userInfo = retrofit.create(UserInfo::class.java)
+
+        userInfo.search(id).enqueue(object : Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                var result = response.body()
+                if(result?.code =="0000"){
+                    var day15 = result.day15
+                    var day30 = result.day30
+                    for (i in day15){
+                        println(i[0]+" "+i[1])
+                    }
+                    println("----------------------------")
+                    for (i in day30){
+                        println(i[0]+" "+i[1])
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
 
         /*  modifybt.setOnClickListener {

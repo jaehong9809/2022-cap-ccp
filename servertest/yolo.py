@@ -80,4 +80,7 @@ def process(image, user, date, sex, weight, user_height, age):
     db.commit()
     db.close()
 
+    if os.path.isfile(image):
+        os.remove(image)
+
     return sum_calorie, img_str
