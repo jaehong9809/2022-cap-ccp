@@ -89,16 +89,103 @@ class InfoPage : Fragment() {
         var height = requireActivity().intent!!.extras!!.get("height") as Int
         var age = requireActivity().intent!!.extras!!.get("age") as Int
 
-        sp1.setSelection(1)
-        sp2.setSelection(2)
-        sp3.setSelection(2)
-        sp4.setSelection(2)
+        var rweight:Int
+        var rheight:Int
+        var rage:Int
 
-        dataInfo2.search(sex, height, weight, age).enqueue(object : Callback<Data2>{
+        var sexlist = mutableListOf<String>("  남", "  여")
+        var ada1: ArrayAdapter<String>
+        ada1 = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            sexlist
+        )     //성별 스피너
+        sp1.adapter = ada1
+
+
+        var weightlist = mutableListOf<String>()
+        for (i in 30..120 step 10) {
+            weightlist.add(i.toString())
+        }
+        var ada2: ArrayAdapter<String>
+        ada2 = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            weightlist
+        )     //몸무게스피너
+        sp2.adapter = ada2
+
+
+        var heightlist = mutableListOf<String>()
+        var ada3: ArrayAdapter<String>
+        for (i in 100..200 step 10) {
+            heightlist.add(i.toString())
+        }
+        ada3 = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            heightlist
+        )      // 키 스피너
+        sp3.adapter = ada3
+
+
+        var agelist = mutableListOf<String>()
+        for (i in 10..100 step 10) {
+            agelist.add(i.toString())
+        }
+        var ada4: ArrayAdapter<String>
+        ada4 = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            agelist
+        )        //나이 스피너
+        sp4.adapter = ada4
+
+        if (sex.equals('M')) {
+            sp1.setSelection(0)
+        }
+        else{
+            sp1.setSelection(1)
+        }
+        if((weight/10)-2<0){
+            sp2.setSelection(0)
+            rweight=30
+        }
+        else{
+            sp2.setSelection((weight/10)-2)
+            rweight=(weight/10)*10
+        }
+        if((height/10)-10<0){
+            sp3.setSelection(0)
+            rheight=100
+        }
+        else{
+            sp3.setSelection((height/10)-10)
+            rheight=(height/10)*10
+        }
+        if((age/10)-1<0){
+            sp4.setSelection(0)
+            rage=10
+        }
+        else{
+            sp4.setSelection((age/10)-1)
+            rage=(age/10)*10
+        }
+
+        sp1.setSelection(1)
+        sp2.setSelection(1)
+        sp3.setSelection(1)
+        sp4.setSelection(1)
+        dataInfo2.search(sex, rheight, rweight, rage).enqueue(object : Callback<Data2>{
             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                 var result = response.body()
                 if(result?.code =="0000"){
-                    println(result.info[1])
+                    var foods = result.info
+                    val entries: ArrayList<PieEntry> = ArrayList()
+                    for (i in foods){
+                        entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
+                    }
+                    makepiechart(piechart1, entries)
                 }
                 else{
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -124,53 +211,7 @@ class InfoPage : Fragment() {
                 } else
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
 
-                var sexlist = mutableListOf<String>("  남", "  여")
-                var ada1: ArrayAdapter<String>
-                ada1 = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    sexlist
-                )     //성별 스피너
-                sp1.adapter = ada1
 
-
-                var weightlist = mutableListOf<String>()
-                for (i in 30..120) {
-                    weightlist.add(i.toString())
-                }
-                var ada2: ArrayAdapter<String>
-                ada2 = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    weightlist
-                )     //몸무게스피너
-                sp2.adapter = ada2
-
-
-                var heightlist = mutableListOf<String>()
-                var ada3: ArrayAdapter<String>
-                for (i in 100..200) {
-                    heightlist.add(i.toString())
-                }
-                ada3 = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    heightlist
-                )      // 키 스피너
-                sp3.adapter = ada3
-
-
-                var agelist = mutableListOf<String>()
-                for (i in 1..100) {
-                    agelist.add(i.toString())
-                }
-                var ada4: ArrayAdapter<String>
-                ada4 = ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    agelist
-                )        //나이 스피너
-                sp4.adapter = ada4
 
                 sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -179,10 +220,11 @@ class InfoPage : Fragment() {
                                 var result = response.body()
                                 if(result?.code =="0000"){
                                     var foods = result.info
+                                    val entries: ArrayList<PieEntry> = ArrayList()
                                     for (i in foods){
-                                        println(i[0])
-                                        println(i[1])
+                                        entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
                                     }
+                                    makepiechart(piechart1, entries)
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -206,10 +248,11 @@ class InfoPage : Fragment() {
                                 var result = response.body()
                                 if(result?.code =="0000"){
                                     var foods = result.info
+                                    val entries: ArrayList<PieEntry> = ArrayList()
                                     for (i in foods){
-                                        println(i[0])
-                                        println(i[1])
+                                        entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
                                     }
+                                    makepiechart(piechart1, entries)
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -233,10 +276,11 @@ class InfoPage : Fragment() {
                                 var result = response.body()
                                 if(result?.code =="0000"){
                                     var foods = result.info
+                                    val entries: ArrayList<PieEntry> = ArrayList()
                                     for (i in foods){
-                                        println(i[0])
-                                        println(i[1])
+                                        entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
                                     }
+                                    makepiechart(piechart1, entries)
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -260,10 +304,11 @@ class InfoPage : Fragment() {
                                 var result = response.body()
                                 if(result?.code =="0000"){
                                     var foods = result.info
+                                    val entries: ArrayList<PieEntry> = ArrayList()
                                     for (i in foods){
-                                        println(i[0])
-                                        println(i[1])
+                                        entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
                                     }
+                                    makepiechart(piechart1, entries)
                                 }
                                 else{
                                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -304,14 +349,14 @@ class InfoPage : Fragment() {
                     foodcnt.ramen = i.ramen
                     foodcnt.japchae = i.japchae
                 }
-                val entries: ArrayList<PieEntry> = ArrayList()
-                entries.add(PieEntry((foodcnt.rice).toFloat(), "RICE"))
-                entries.add(PieEntry((foodcnt.Acornjellu).toFloat(), "ACORNJELLY"))
-                entries.add(PieEntry((foodcnt.redbean).toFloat(), "REDBEAN"))
-                entries.add(PieEntry((foodcnt.ramen).toFloat(), "RAMEN"))
-                entries.add(PieEntry((foodcnt.japchae).toFloat(), "JAPCHAE"))
+                /* val entries: ArrayList<PieEntry> = ArrayList()
+                 entries.add(PieEntry((foodcnt.rice).toFloat(), "RICE"))
+                 entries.add(PieEntry((foodcnt.Acornjellu).toFloat(), "ACORNJELLY"))
+                 entries.add(PieEntry((foodcnt.redbean).toFloat(), "REDBEAN"))
+                 entries.add(PieEntry((foodcnt.ramen).toFloat(), "RAMEN"))
+                 entries.add(PieEntry((foodcnt.japchae).toFloat(), "JAPCHAE"))
 
-                makepiechart(piechart1, entries)
+                 makepiechart(piechart1, entries)*/
 
                 val entriesa = ArrayList<BarEntry>()
                 entriesa.add(BarEntry(0f, 0f))

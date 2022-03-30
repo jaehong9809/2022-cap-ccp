@@ -77,13 +77,24 @@ class UserPage : Fragment() {
                 if(result?.code =="0000"){
                     var day15 = result.day15
                     var day30 = result.day30
+                    var entries15 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     for (i in day15){
-                        println(i[0]+" "+i[1])
+
+                        var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
+                        var calorie=i[1].toInt()
+                        var tmp:dayCalorie= dayCalorie(str, calorie)
+                        entries15.add(tmp)
                     }
-                    println("----------------------------")
+                    makechart(chart1, entries15, 15)                       //그래프 생성
+                    var entries30 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     for (i in day30){
-                        println(i[0]+" "+i[1])
+
+                        var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
+                        var calorie=i[1].toInt()
+                        var tmp:dayCalorie= dayCalorie(str, calorie)
+                        entries30.add(tmp)
                     }
+                    makechart(chart2, entries30, 30)                       //그래프 생성
                 }
                 else{
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -114,10 +125,6 @@ class UserPage : Fragment() {
             var tmp:dayCalorie= dayCalorie(str, calorie)
             entries.add(tmp)
         }
-
-
-        makechart(chart1, entries, 15)                       //그래프 생성
-        makechart(chart2, entries, 30)
 
         return view
     }
