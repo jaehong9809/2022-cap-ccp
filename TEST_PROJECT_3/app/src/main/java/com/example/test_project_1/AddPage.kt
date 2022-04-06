@@ -9,12 +9,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test_project_1.addrecy.AddAdapter
 import com.example.test_project_1.addrecy.AddModel
+import com.example.test_project_1.foodrecy.FoodInfoAdapter
+import com.example.test_project_1.foodrecy.FoodModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AddPage : AppCompatActivity() {
     private lateinit var addname: Spinner
-    private lateinit var addweight: TextView
+    private lateinit var addweight: Spinner
     private lateinit var addunit: Spinner
     private lateinit var addtime: Spinner
 
@@ -27,7 +38,7 @@ class AddPage : AppCompatActivity() {
     private val succtext = "추가되었습니다!"
 
     private var mDatas: ArrayList<AddModel> = arrayListOf(
-        AddModel("", 0, 0, "", 0)
+        AddModel("", 0,  "", 0)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +47,6 @@ class AddPage : AppCompatActivity() {
 
         addname = findViewById(R.id.addname)
         addweight = findViewById(R.id.addweight)
-        addunit = findViewById(R.id.addunit)
         addtime = findViewById(R.id.addtime)
         addbtn = findViewById(R.id.addbtn)
         savebtn = findViewById(R.id.savebtn)
@@ -54,6 +64,13 @@ class AddPage : AppCompatActivity() {
         var cyear=cal.get(Calendar.YEAR)
         var cmonth=cal.get(Calendar.MONTH)
         var cday=cal.get(Calendar.DAY_OF_MONTH)
+
+
+        var id = intent.getStringExtra("textId") as String
+        var sex = intent.getStringExtra("sex") as String
+        var user_weight = intent.getIntExtra("weight", 0)
+        var height = intent.getIntExtra("height", 0)
+        var age = intent.getIntExtra("age", 0)
 
         var name = ""
         ArrayAdapter.createFromResource(this, R.array.dietname, android.R.layout.simple_spinner_item)
@@ -76,21 +93,21 @@ class AddPage : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected (parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                adddate = cyear*100000 + cmonth*1000 + cday*10
+                adddate = cyear*100000 + (cmonth+1)*1000 + cday*10
                 adddate += position
             }
         }
 
-        var unit = ""
-        ArrayAdapter.createFromResource(this, R.array.dietunit, android.R.layout.simple_spinner_item)
+        var weight = ""
+        ArrayAdapter.createFromResource(this, R.array.dietweight, android.R.layout.simple_spinner_item)
             .also { spiadapter -> spiadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                addunit.adapter = spiadapter
+                addweight.adapter = spiadapter
             }
-        addunit.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        addweight.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected (parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                unit = addunit.getSelectedItem().toString()
+                weight = addweight.getSelectedItem().toString()
             }
         }
 
@@ -101,20 +118,37 @@ class AddPage : AppCompatActivity() {
         addrecyview.setHasFixedSize(true)
 
         addbtn.setOnClickListener {
-            var weight = addweight.text.toString()
-            if(weight == "") {
-                gettoast(failtext)
+            if(mDatas.get(0).add_name == "") {
+                mDatas.clear()
             }
-            else {
-                var weightInt = Integer.parseInt(weight)
-                if(mDatas.get(0).add_name == "") {
-                    mDatas.clear()
-                }
-                val kcal = getkcal(tDatas, name, weightInt, unit)
-                add(mDatas, name, adddate, weightInt, unit, kcal)
-                gettoast(succtext)
-                addadapter.setData()
+            val kcal = getkcal(tDatas, name, weight.toFloat())
+            add(mDatas, name, adddate, weight, kcal)
+            gettoast(succtext)
+            addadapter.setData()
+        }
+
+        savebtn.setOnClickListener {
+            var retro = Retro()
+            var retrofit = retro.retrofit
+            var savefood = retrofit.create(SaveFood::class.java)
+
+            mDatas.forEach{
+                savefood.saveFood(it.add_name, it.add_date, id, sex, user_weight, height, age).enqueue(object: Callback<Food> {
+                    override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                        var food = response.body() as Food
+                        if(food.code == "0000"){
+                            Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Toast.makeText(applicationContext, "없어", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    override fun onFailure(call: Call<Food>, t: Throwable) {
+                        Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
+
         }
     }
 
@@ -124,23 +158,18 @@ class AddPage : AppCompatActivity() {
         toast.show()
     }
 
-    fun add(mDatas: ArrayList<AddModel>, addname: String, adddate: Int, addweight: Int, addunit: String, addkcal: Int) {
+    fun add(mDatas: ArrayList<AddModel>, addname: String, adddate: Int, addweight: String, addkcal: Int) {
         with(mDatas){
-            add(AddModel(addname, adddate, addweight, addunit, addkcal))
+            add(AddModel(addname, adddate, addweight, addkcal))
         }
     }
 
-    fun getkcal(tDatas: ArrayList<TestModel>, name: String, weight: Int, unit: String): Int {
+    fun getkcal(tDatas: ArrayList<TestModel>, name: String, weight: Float): Int {
         var kcal = 0
         tDatas.forEach {
             if(it.name == name) {
                 var thiskcal = (it.carb * 4) + (it.prot * 4) + (it.fat) * 9
-                if (unit == "g") {
-                    kcal = (thiskcal * ((weight * 100) / it.weight)) / 100
-                }
-                else {
-                    kcal = thiskcal * weight
-                }
+                kcal = (thiskcal * weight).toInt()
             }
         }
         return kcal

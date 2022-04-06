@@ -15,7 +15,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
-            android:background="@drawable/item_border"
             android:layout_marginLeft="5dp" />
 
         <TextView
@@ -28,28 +27,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:background="@drawable/item_border"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="10dp"/>
 
         <TextView
             android:id="@+id/addweight"
-            android:text="얼마나"
+            android:text="양"
             android:textSize="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_border"
             android:layout_weight="1.5" />
         <TextView
-            android:id="@+id/addunit"
-            android:text="단위"
+            android:text="인분"
             android:textSize="15dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="10dp"/>
 
         <TextView
             android:id="@+id/addkcal"
@@ -59,7 +56,6 @@
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/item_border"
             android:layout_weight="1.5" />
         <TextView
             android:text="kcal"
@@ -70,5 +66,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="5dp"/>
+
+        <ImageView
+            android:id="@+id/canclebtn"
+            android:src="@drawable/ic_cancle"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/item_border"/>
     </LinearLayout>
 </layout>

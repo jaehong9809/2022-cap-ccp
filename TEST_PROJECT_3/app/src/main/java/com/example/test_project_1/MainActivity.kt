@@ -17,9 +17,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var tocalbt:Button
 
     var mData: ArrayList<FoodModel> = arrayListOf(
-        FoodModel("dduck", "떡볶이", 202202161, 200, 5, 4, 10),
-        FoodModel("pizza", "피자", 202202252, 100, 15, 2, 3),
-        FoodModel("", "카레", 202202053, 500, 12, 15, 30)
+        FoodModel( "떡볶이", 202202161, 200, 5, 4, 10),
+        FoodModel( "피자", 202202252, 100, 15, 2, 3),
+        FoodModel( "카레", 202202053, 500, 12, 15, 30)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

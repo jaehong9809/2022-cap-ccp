@@ -1,7 +1,6 @@
 package com.example.test_project_1.foodrecy
 
 data class FoodModel (
-    val food_img: String,
     val food_name: String,
     val food_time: Int,
     val food_kcal: Int,

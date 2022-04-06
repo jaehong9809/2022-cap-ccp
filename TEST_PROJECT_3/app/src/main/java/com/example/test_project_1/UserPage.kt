@@ -42,6 +42,12 @@ class UserPage : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.user_page, container, false)
 
+        var id = requireActivity().intent!!.extras!!.get("textId") as String
+        var user_sex = requireActivity().intent!!.extras!!.get("sex") as String
+        var user_weight = requireActivity().intent!!.extras!!.get("weight") as Int
+        var user_height = requireActivity().intent!!.extras!!.get("height") as Int
+        var user_age = requireActivity().intent!!.extras!!.get("age") as Int
+
         chart1=view.findViewById(R.id.chart1)            //15일
         chart2=view.findViewById(R.id.chart2)            //30일
 
@@ -53,7 +59,7 @@ class UserPage : Fragment() {
         heighttv=view.findViewById(R.id.heighttv)
         username=view.findViewById(R.id.username)
         // modifybt=view.findViewById(R.id.modifybt)
-        var userone=userData("홍길동",25, 69, "남", 1700, 173)
+        var userone=userData(id,user_age, user_weight, user_sex, 1700, user_height)
         var qq=((userone.weight)/((userone.height*0.01)*(userone.height*0.01))).toInt()
         agetv.text=Integer.toString(userone.age)
         weight.text=Integer.toString(userone.weight)
@@ -63,12 +69,9 @@ class UserPage : Fragment() {
         username.text=userone.name
         bmitv.text=qq.toString()
 
-        var id = requireActivity().intent!!.extras!!.get("textId") as String
 
-        var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.118:8000")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        var retro = Retro()
+        var retrofit = retro.retrofit
         var userInfo = retrofit.create(UserInfo::class.java)
 
         userInfo.search(id).enqueue(object : Callback<User>{
@@ -78,20 +81,34 @@ class UserPage : Fragment() {
                     var day15 = result.day15
                     var day30 = result.day30
                     var entries15 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
+                    var index=0
                     for (i in day15){
-
+                        index++
                         var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
                         var calorie=i[1].toInt()
-                        var tmp:dayCalorie= dayCalorie(str, calorie)
+                        var tmp:dayCalorie
+                        if(index%2==0){
+                            tmp= dayCalorie(str, calorie)
+                        }
+                        else{
+                            tmp= dayCalorie(" ", calorie)
+                        }
                         entries15.add(tmp)
                     }
                     makechart(chart1, entries15, 15)                       //그래프 생성
                     var entries30 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
+                    index=0
                     for (i in day30){
-
+                        index++
                         var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
                         var calorie=i[1].toInt()
-                        var tmp:dayCalorie= dayCalorie(str, calorie)
+                        var tmp:dayCalorie
+                        if(index%3==0){
+                            tmp= dayCalorie(str, calorie)
+                        }
+                        else{
+                            tmp=dayCalorie(" ", calorie)
+                        }
                         entries30.add(tmp)
                     }
                     makechart(chart2, entries30, 30)                       //그래프 생성

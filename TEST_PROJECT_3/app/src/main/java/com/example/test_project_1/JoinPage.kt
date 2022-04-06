@@ -29,10 +29,8 @@ class JoinPage : AppCompatActivity() {
         var height: EditText = findViewById(R.id.height)
         var weight: EditText = findViewById(R.id.weight)
 
-        var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.118:8000")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        var retro = Retro()
+        var retrofit = retro.retrofit
 
         var joinService = retrofit.create(JoinService::class.java)
 

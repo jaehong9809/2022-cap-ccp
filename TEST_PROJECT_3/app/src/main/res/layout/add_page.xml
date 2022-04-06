@@ -40,29 +40,28 @@
                 android:id="@+id/addname"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="30dp"
                 android:text="음식 이름"
                 android:textSize="16dp" />
 
             <TextView
-                android:text="열량: "
+                android:text="양: "
                 android:textColor="@android:color/background_dark"
                 android:textSize="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <EditText
-                android:id="@+id/addweight"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textSize="16dp"
-                android:layout_weight="1"
-                android:inputType="number"/>
             <Spinner
-                android:id="@+id/addunit"
-                android:layout_width="100dp"
+                android:id="@+id/addweight"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
-                android:text="음식 이름"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:layout_weight="1"/>
+            <TextView
+                android:text="인분"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 
@@ -109,6 +108,13 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/item_border"
                 android:layout_margin="4dp"/>
+            <TextView
+                android:id="@+id/emptytext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="비어있습니다!"
+                android:textSize="25dp"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout

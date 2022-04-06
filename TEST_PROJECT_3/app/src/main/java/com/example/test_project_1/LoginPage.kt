@@ -15,8 +15,7 @@ import com.example.test_project_1.login.LoginService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 
 class LoginPage : AppCompatActivity() {
 
@@ -43,10 +42,8 @@ class LoginPage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.118:8000")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        var retro = Retro()
+        var retrofit = retro.retrofit
 
         var loginService = retrofit.create(LoginService::class.java)
 

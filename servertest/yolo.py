@@ -29,7 +29,7 @@ def process(image, user, date, sex, weight, user_height, age):
     img = cv2.imread(image)
     img = cv2.resize(img, None, fx=0.4, fy=0.4)
     height, width, channels = img.shape
-    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
+    blob = cv2.dnn.blobFromImage(img, 0.00392, (832, 832), (0, 0, 0), True, crop=False)
     net.setInput(blob)
     outs = net.forward(output_layers)
     class_ids = []

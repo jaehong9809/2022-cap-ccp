@@ -25,5 +25,7 @@ urlpatterns = [
     path('food/', views.food),
     path('datainfo/', views.datainfo),
     path('datainfo2/', views.datainfo2),
-    path('userinfo/', views.userinfo)
+    path('userinfo/', views.userinfo),
+    path('saveFood/', views.saveFood),
+    path('delete/', views.deleteFood)
 ]

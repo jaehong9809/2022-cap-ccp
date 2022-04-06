@@ -65,10 +65,8 @@ class CameraPage: AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.35.118:8000")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        var retro = Retro()
+        var retrofit = retro.retrofit
 
         if (resultCode == Activity.RESULT_OK) {
             val file = File(photoFile.absolutePath)

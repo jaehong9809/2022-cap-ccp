@@ -23,9 +23,23 @@
         <item>피자</item>
     </string-array>
 
-    <string-array name="dietunit">
-        <item>g</item>
-        <item>인분</item>
+    <string-array name="dietweight">
+        <item>0.25</item>
+        <item>0.5</item>
+        <item>0.75</item>
+        <item>1</item>
+        <item>1.25</item>
+        <item>1.5</item>
+        <item>1.75</item>
+        <item>2</item>
+        <item>2.25</item>
+        <item>2.5</item>
+        <item>2.75</item>
+        <item>3</item>
+        <item>3.25</item>
+        <item>3.5</item>
+        <item>3.75</item>
+        <item>4</item>
     </string-array>
 
     <string-array name="diettime">

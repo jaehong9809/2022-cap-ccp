@@ -97,7 +97,6 @@ def food(request):
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
-            lst = [list(foods) for foods in result]
             return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
 
 
@@ -221,5 +220,79 @@ def userinfo(request):
         for i in range(len(tmp1)):
             userdaycallist30.append([tmp1[i], tmp2[i]])
 
+        print(userdaycallist30)
+
+        db.commit()
+        db.close()
+
         return JsonResponse({'code': '0000', 'day15': userdaycallist15, 'day30': userdaycallist30}, status=200)
+
+
+@csrf_exempt
+def saveFood(request):
+    if request.method == 'POST':
+        food_name = request.POST.get('food_name', '')
+        time = request.POST.get('time', 0)
+        user = request.POST.get('id', '')
+        sex = request.POST.get('sex', '')
+        height = int(request.POST.get('height'))
+        weight = int(request.POST.get('weight'))
+        age = int(request.POST.get('age'))
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "select calorie, carbo, protein, fat, id from foods where name = %s"
+        cursor.execute(sql, food_name)
+        result = cursor.fetchall()
+        calorie = result[0][0]
+        carbo = result[0][1]
+        protein = result[0][2]
+        fat = result[0][3]
+        id = result[0][4]
+        sql = "insert into user_food (user, food, food_name, tim, sex, weight, height, age, calorie, carbo, " \
+                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (user, id, food_name, time, sex, weight, height, age,
+                                    calorie, carbo, protein, fat))
+        db.commit()
+        db.close()
+
+        return JsonResponse({'code': '0000'}, status=200)
+
+@csrf_exempt
+def deleteFood(request):
+    if request.method == 'POST':
+        food_name = request.POST.get('food', '')
+        time = request.POST.get('time', 0)
+        user = request.POST.get('id', '')
+
+        print(food_name, time, user)
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "delete from user_food where user = %s and tim = %s and food_name = %s"
+        cursor.execute(sql, (user, time, food_name))
+
+        sql = "select food_name, tim, calorie, carbo, protein, fat from user_food where user = %s and tim like %s"
+        cursor.execute(sql, (user, "%" + time))
+        result = cursor.fetchall()
+
+        db.commit()
+        db.close()
+
+        if len(result) == 0:
+            return JsonResponse({"code": "0001"})
+        else:
+            return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
 

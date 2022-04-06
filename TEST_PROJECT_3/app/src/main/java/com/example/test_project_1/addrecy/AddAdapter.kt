@@ -3,9 +3,8 @@ package com.example.test_project_1.addrecy
 import android.content.Context
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test_project_1.R
 import com.example.test_project_1.databinding.AddItemBinding
-import kotlin.collections.ArrayList
+
 
 class AddAdapter(val context: Context, val datalist: ArrayList<AddModel>):
     RecyclerView.Adapter<AddAdapter.Holder>() {
@@ -30,9 +29,18 @@ class AddAdapter(val context: Context, val datalist: ArrayList<AddModel>):
             }
 
             binding.addname.text=addModel.add_name
-            binding.addweight.text=addModel.add_weight.toString()
-            binding.addunit.text=addModel.add_unit
+            binding.addweight.text=addModel.add_weight
             binding.addkcal.text=addModel.add_kcal.toString()
+
+            val position = adapterPosition
+            binding.canclebtn.setOnClickListener {
+                delete(position)
+                if(datalist.size == 0) {
+                    with(datalist){
+                        add(AddModel("", 0, "", 0))
+                    }
+                }
+            }
         }
     }
 
@@ -45,6 +53,11 @@ class AddAdapter(val context: Context, val datalist: ArrayList<AddModel>):
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(datalist[position])
+    }
+
+    fun delete(positon: Int) {
+        datalist.removeAt(positon)
+        setData()
     }
 
     // 뷰 갱신

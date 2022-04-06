@@ -56,17 +56,11 @@ class InfoPage : Fragment() {
     lateinit var monthavgcal: Array<Array<String>>
     lateinit var agecalavglist: Array<String>
     var typemsg = Array<String>(4, { "" })
-    var retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.35.118:8000")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    var dataInfo = retrofit.create(DataInfo::class.java)
 
-    var retrofit2 = Retrofit.Builder()
-        .baseUrl("http://192.168.35.118:8000")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    var dataInfo2 = retrofit2.create(DataInfo2::class.java)
+    var retro = Retro()
+    var retrofit = retro.retrofit
+    var dataInfo = retrofit.create(DataInfo::class.java)
+    var dataInfo2 = retrofit.create(DataInfo2::class.java)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -141,18 +135,18 @@ class InfoPage : Fragment() {
         )        //나이 스피너
         sp4.adapter = ada4
 
-        if (sex.equals('M')) {
+        if (sex.equals("M")) {
             sp1.setSelection(0)
         }
         else{
             sp1.setSelection(1)
         }
-        if((weight/10)-2<0){
+        if((weight/10)-3<0){
             sp2.setSelection(0)
             rweight=30
         }
         else{
-            sp2.setSelection((weight/10)-2)
+            sp2.setSelection((weight/10)-3)
             rweight=(weight/10)*10
         }
         if((height/10)-10<0){
@@ -172,10 +166,6 @@ class InfoPage : Fragment() {
             rage=(age/10)*10
         }
 
-        sp1.setSelection(1)
-        sp2.setSelection(1)
-        sp3.setSelection(1)
-        sp4.setSelection(1)
         dataInfo2.search(sex, rheight, rweight, rage).enqueue(object : Callback<Data2>{
             override fun onResponse(call: Call<Data2>, response: Response<Data2>) {
                 var result = response.body()
