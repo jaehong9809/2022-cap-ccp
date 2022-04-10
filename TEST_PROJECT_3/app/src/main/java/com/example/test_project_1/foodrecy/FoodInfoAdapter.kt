@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.test_project_1.Food
 import com.example.test_project_1.FoodService
 import com.example.test_project_1.R
+import com.example.test_project_1.Retro
 import com.example.test_project_1.addrecy.AddModel
 import com.example.test_project_1.databinding.FoodItemBinding
 import kotlinx.coroutines.CoroutineScope
@@ -49,10 +50,8 @@ class FoodInfoAdapter(val context: Context, val datalist: ArrayList<FoodModel>, 
             binding.foodFatinfo.text=foodModel.food_fat.toString()
 
             binding.deletebtn.setOnClickListener {
-                var retrofit = Retrofit.Builder()
-                    .baseUrl("http://192.168.77.235:8000")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+                var retro = Retro()
+                var retrofit = retro.retrofit
                 var deleteFood = retrofit.create(DeleteFood::class.java)
 
                 deleteFood.deleteFood(time, textId, foodModel.food_name).enqueue(object: Callback<Food> {

@@ -183,7 +183,7 @@ class CalendarPage : Fragment() {
         camerabt.setOnClickListener {
             var intent = Intent(getActivity(), CameraPage::class.java)
             intent.putExtra("textId", textId)
-            intent.putExtra("time", time)
+            intent.putExtra("time", selectDay+time)
             intent.putExtra("sex", sex)
             intent.putExtra("weight", weight)
             intent.putExtra("height", height)
@@ -213,9 +213,6 @@ class CalendarPage : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK){
-            var cal = data!!.getStringExtra("cal")
-            Toast.makeText(getActivity(), cal, Toast.LENGTH_SHORT).show()
-
             //test
             foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
                 override fun onResponse(call: Call<Food>, response: Response<Food>) {

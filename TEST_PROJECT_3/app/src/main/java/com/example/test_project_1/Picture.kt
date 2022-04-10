@@ -12,11 +12,5 @@ interface Picture {
     @POST("/calculate/")
     fun requestPicture(
         @Part image : MultipartBody.Part,
-        @Part date : MultipartBody.Part,
-        @Part id : MultipartBody.Part,
-        @Part sex : MultipartBody.Part,
-        @Part weight : MultipartBody.Part,
-        @Part height : MultipartBody.Part,
-        @Part age : MultipartBody.Part,
     ) : Call<Cal>
 }

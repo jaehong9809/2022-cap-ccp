@@ -26,21 +26,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var inten = intent
-        var textId = inten.getStringExtra("textId")
-        var sex = inten.getStringExtra("sex")
-        var weight = inten.getIntExtra("weight", 0)
-        var height = inten.getIntExtra("height", 0)
-        var age = inten.getIntExtra("age", 0)
+        setid = inten.getStringExtra("textId").toString()
+        setsex = inten.getStringExtra("sex").toString()
+        setweight = inten.getIntExtra("weight", 0)
+        setheight = inten.getIntExtra("height", 0)
+        setage = inten.getIntExtra("age", 0)
 
         changeFragment(calfrag)
         FragmentPage()
 
         intent.putExtra("DataList", mData)
-        intent.putExtra("textId", textId)
-        intent.putExtra("sex", sex)
-        intent.putExtra("weight", weight)
-        intent.putExtra("height", height)
-        intent.putExtra("age", age)
+        intent.putExtra("textId", setid)
+        intent.putExtra("sex", setsex)
+        intent.putExtra("weight", setweight)
+        intent.putExtra("height", setheight)
+        intent.putExtra("age", setage)
     }
 
     private fun FragmentPage() {

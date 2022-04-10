@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
+    android:background="#edfce8"
     android:fillViewport="true"
     tools:context=".UserPage">
     <LinearLayout
@@ -43,7 +43,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="560dp"
+            android:layout_height="660dp"
 
             android:orientation="vertical"
 
@@ -208,6 +208,37 @@
                         android:layout_margin="3dp"
                         android:id="@+id/heighttv"
                         android:background="@drawable/edge"
+                        ></TextView>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/edge3"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    >
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:id="@+id/advimv1"
+                        android:src="@drawable/star_verygood"
+                        ></ImageView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Text 텍스트 가나다라마바사아자차카타파하"
+                        android:id="@+id/advtv1"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="20dp"
                         ></TextView>
                 </LinearLayout>
 

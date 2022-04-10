@@ -1,11 +1,14 @@
 package com.example.test_project_1
 
+import android.content.Intent
 import android.graphics.Color
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -34,6 +37,10 @@ class UserPage : Fragment() {
     lateinit var heighttv:TextView
     lateinit var username:TextView
     lateinit var modifybt:Button
+    lateinit var advtv:TextView
+    lateinit var advimv:ImageView
+    var standardcal=0
+    var day30totalcal=0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +65,9 @@ class UserPage : Fragment() {
         daesatv=view.findViewById(R.id.daesatv)
         heighttv=view.findViewById(R.id.heighttv)
         username=view.findViewById(R.id.username)
-        // modifybt=view.findViewById(R.id.modifybt)
+        advtv=view.findViewById(R.id.advtv1)
+        advimv=view.findViewById(R.id.advimv1)
+        modifybt=view.findViewById(R.id.modifybt)
         var userone=userData(id,user_age, user_weight, user_sex, 1700, user_height)
         var qq=((userone.weight)/((userone.height*0.01)*(userone.height*0.01))).toInt()
         agetv.text=Integer.toString(userone.age)
@@ -69,6 +78,11 @@ class UserPage : Fragment() {
         username.text=userone.name
         bmitv.text=qq.toString()
 
+
+        modifybt.setOnClickListener {
+            var intent = Intent(getActivity(), ModifyPage::class.java)
+            startActivity(intent)
+        }
 
         var retro = Retro()
         var retrofit = retro.retrofit
@@ -102,6 +116,7 @@ class UserPage : Fragment() {
                         index++
                         var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
                         var calorie=i[1].toInt()
+                        day30totalcal+=calorie
                         var tmp:dayCalorie
                         if(index%3==0){
                             tmp= dayCalorie(str, calorie)
@@ -112,6 +127,51 @@ class UserPage : Fragment() {
                         entries30.add(tmp)
                     }
                     makechart(chart2, entries30, 30)                       //그래프 생성
+                    if(user_sex.equals("M")){
+                        standardcal=when(user_age){
+                            in 1..2 -> 900
+                            in 3..5 -> 1400
+                            in 6..8 -> 1700
+                            in 9..11 -> 2000
+                            in 12..14 -> 2500
+                            in 15..18 ->2700
+                            in 19..29 ->2600
+                            in 30..49 -> 2500
+                            in 50..64 ->2200
+                            in 65..74-> 2000
+                            in 75..150->1900
+                            else ->1900
+                        }
+                    }
+                    else{
+                        standardcal=when(user_age){
+                            in 1..2 -> 900
+                            in 3..5 -> 1400
+                            in 6..8 -> 1500
+                            in 9..11 -> 1800
+                            in 12..14 -> 2000
+                            in 15..18 ->2000
+                            in 19..29 ->2000
+                            in 30..49 -> 1900
+                            in 50..64 ->1700
+                            in 65..74-> 1600
+                            in 75..150->1500
+                            else ->1900
+                        }
+                    }
+                    standardcal=(standardcal*30)
+                    if(day30totalcal>standardcal+1000){                 //기준+1000 보다 큼 -> 잘못됨
+                        advtv.text="잘못된 식습관입니다! 칼로리를 조절하시오!"
+                        advimv.setImageResource(R.drawable.star_bad)
+                    }
+                    else if((day30totalcal>standardcal-1000)&&(day30totalcal<standardcal+1000)){    //기준-1000 < <기준 +1000 사이 -> good
+                        advtv.text="좋은 식습관입니다! 지금을 유지하십시오!"
+                        advimv.setImageResource(R.drawable.star_good)
+                    }
+                    else if(day30totalcal<standardcal-1000){                //기준 -1000보다 작음 -> 아주 굳
+                        advtv.text="당신은 완벽한 다이어트를 하고있습니다! 완벽한 몸매에 도전하시오!"
+                        advimv.setImageResource(R.drawable.star_verygood)
+                    }
                 }
                 else{
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()

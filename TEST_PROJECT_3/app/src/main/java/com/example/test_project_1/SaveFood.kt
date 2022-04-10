@@ -11,9 +11,10 @@ interface SaveFood {
     fun saveFood(
         @Field("food_name") food_name:String,
         @Field("time") time:Int,
+        @Field("food_weight") food_weight: String,
         @Field("id") id:String,
         @Field("sex") sex:String,
-        @Field("weight") weight:Int,
+        @Field("user_weight") user_weight:Int,
         @Field("height") height:Int,
         @Field("age") age:Int
     ) : Call<Food>
