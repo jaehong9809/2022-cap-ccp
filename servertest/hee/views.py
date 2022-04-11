@@ -62,15 +62,13 @@ def calculate(request):
     if request.method == 'POST':
         file = request.FILES['proFile']
         default_storage.save(str(file), ContentFile(file.read()))
-        date = request.POST.get('date', '')
-        user = request.POST.get('id', '')
-        sex = request.POST.get('sex', '')
-        weight = int(request.POST.get('weight', ''))
-        height = int(request.POST.get('height', ''))
-        age = int(request.POST.get('age', ''))
-        sum_calorie, img = yolo.process(str(file), user, date, sex, weight, height, age)
 
-        return JsonResponse({'code': '0000', 'msg': str(sum_calorie), 'img': img},  status=200)
+        foods, img, leng = yolo.process(str(file))
+
+        if leng == 0:
+            return JsonResponse({'code': '0001', 'img': img}, status=200)
+        else:
+            return JsonResponse({'code': '0000', 'foods': foods, 'img': img},  status=200)
 
 
 @csrf_exempt
@@ -232,12 +230,15 @@ def userinfo(request):
 def saveFood(request):
     if request.method == 'POST':
         food_name = request.POST.get('food_name', '')
-        time = request.POST.get('time', 0)
+        time = request.POST.get('time', '')
+        food_weight = float(request.POST.get('food_weight', ''))
         user = request.POST.get('id', '')
         sex = request.POST.get('sex', '')
         height = int(request.POST.get('height'))
-        weight = int(request.POST.get('weight'))
+        user_weight = int(request.POST.get('user_weight'))
         age = int(request.POST.get('age'))
+
+
 
         db = pymysql.connect(
             user='root',
@@ -255,10 +256,10 @@ def saveFood(request):
         protein = result[0][2]
         fat = result[0][3]
         id = result[0][4]
-        sql = "insert into user_food (user, food, food_name, tim, sex, weight, height, age, calorie, carbo, " \
-                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (user, id, food_name, time, sex, weight, height, age,
-                                    calorie, carbo, protein, fat))
+        sql = "insert into user_food (user, food, food_name, quantity, tim, sex, weight, height, age, calorie, carbo, " \
+                 "protein, fat) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (user, id, food_name, food_weight, time, sex, user_weight, height, age,
+                                    calorie * food_weight, carbo * food_weight, protein * food_weight, fat * food_weight))
         db.commit()
         db.close()
 
@@ -270,8 +271,6 @@ def deleteFood(request):
         food_name = request.POST.get('food', '')
         time = request.POST.get('time', 0)
         user = request.POST.get('id', '')
-
-        print(food_name, time, user)
 
         db = pymysql.connect(
             user='root',
@@ -295,4 +294,38 @@ def deleteFood(request):
             return JsonResponse({"code": "0001"})
         else:
             return JsonResponse({"foods": [list(foods) for foods in result], "code": "0000"}, status=200)
+
+
+@csrf_exempt
+def usermod(request):
+    if request.method == 'POST':
+        id = request.POST.get('id', '')
+        sex = request.POST.get('sex', '')
+        height = request.POST.get('height', 0)
+        weight = request.POST.get('weight', 0)
+        age = request.POST.get('age', 0)
+
+        db = pymysql.connect(
+            user='root',
+            passwd='1234',
+            host='localhost',
+            db='food',
+            charset='utf8'
+        )
+        cursor = db.cursor()
+        sql = "update user set sex = %s, height = %s, weight = %s, age = %s where username = %s"
+        sql2 = "update user_food set sex = %s, height = %s, weight = %s, age = %s where user = %s"
+        try:
+            cursor.execute(sql, (sex, height, weight, age, id))
+            cursor.execute(sql2, (sex, height, weight, age, id))
+            db.commit()
+            db.close()
+            return JsonResponse({'code': '0000'}, status=200)
+
+        except:
+            db.commit()
+            db.close()
+            return JsonResponse({'code': '0001'}, status=200)
+
+
 

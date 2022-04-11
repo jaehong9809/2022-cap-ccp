@@ -1,9 +1,13 @@
 package com.example.test_project_1
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.media.Image
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,11 +53,11 @@ class UserPage : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.user_page, container, false)
 
-        var id = requireActivity().intent!!.extras!!.get("textId") as String
-        var user_sex = requireActivity().intent!!.extras!!.get("sex") as String
-        var user_weight = requireActivity().intent!!.extras!!.get("weight") as Int
-        var user_height = requireActivity().intent!!.extras!!.get("height") as Int
-        var user_age = requireActivity().intent!!.extras!!.get("age") as Int
+        var id = setid
+        var user_sex = setsex
+        var user_weight = setweight
+        var user_height = setheight
+        var user_age = setage
 
         chart1=view.findViewById(R.id.chart1)            //15일
         chart2=view.findViewById(R.id.chart2)            //30일
@@ -81,7 +85,7 @@ class UserPage : Fragment() {
 
         modifybt.setOnClickListener {
             var intent = Intent(getActivity(), ModifyPage::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 0)
         }
 
         var retro = Retro()
@@ -205,6 +209,20 @@ class UserPage : Fragment() {
 
         return view
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK){
+            var qq=((setweight)/((setheight*0.01)*(setheight*0.01))).toInt()
+            agetv.text=Integer.toString(setage)
+            weight.text=Integer.toString(setweight)
+            sextv.text=setsex
+            heighttv.text=Integer.toString(setheight)
+            username.text=setid
+            bmitv.text=qq.toString()
+            }
+    }
+
     fun makechart(chart1: LineChart, entries: ArrayList<dayCalorie>, daynum:Int){
         val entryList= mutableListOf<Entry>()
         for(i in 1..daynum){

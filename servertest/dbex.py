@@ -13,8 +13,8 @@ cursor = db.cursor()
 lst = [1, 4]
 sum = 0
 sql = "select calorie from foods where id = %s"
-for i in range(len(lst)):
-    cursor.execute(sql, lst[i])
-    result = cursor.fetchall()
-    sum += result[0][0]
-print(sum)
+cursor.execute(sql, 1)
+result = cursor.fetchall()
+
+print(result)
+

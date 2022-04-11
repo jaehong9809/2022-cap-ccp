@@ -78,10 +78,10 @@ class InfoPage : Fragment() {
         barchart1 = view.findViewById(R.id.barchart1)
         linechart1 = view.findViewById(R.id.linechart1)
 
-        var sex = requireActivity().intent!!.extras!!.get("sex") as String
-        var weight = requireActivity().intent!!.extras!!.get("weight") as Int
-        var height = requireActivity().intent!!.extras!!.get("height") as Int
-        var age = requireActivity().intent!!.extras!!.get("age") as Int
+        var sex = setsex
+        var weight = setweight
+        var height = setheight
+        var age = setage
 
         var rweight:Int
         var rheight:Int

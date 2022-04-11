@@ -27,5 +27,6 @@ urlpatterns = [
     path('datainfo2/', views.datainfo2),
     path('userinfo/', views.userinfo),
     path('saveFood/', views.saveFood),
-    path('delete/', views.deleteFood)
+    path('delete/', views.deleteFood),
+    path('usermod/', views.usermod)
 ]
