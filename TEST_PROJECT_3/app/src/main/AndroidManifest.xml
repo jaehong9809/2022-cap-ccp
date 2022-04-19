@@ -40,6 +40,8 @@
         <activity
             android:name=".CameraPage"
             android:exported="false" />
+        <activity android:name=".GalleryPage"
+            android:exported="false" />
         <activity
             android:name=".AddPage"
             android:exported="false" />

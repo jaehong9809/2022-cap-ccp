@@ -43,15 +43,22 @@ def login(request):
                 charset='utf8'
             )
             cursor = db.cursor()
-            sql = "select sex, weight, height, age from user where username = %s"
+            sql = "select sex, weight, height, age, img from user where username = %s"
             cursor.execute(sql, id)
             result = cursor.fetchall()
 
+            print(result[0][4])
+
             db.commit()
             db.close()
+            if result[0][4] is None:
+                return JsonResponse(
+                    {'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
+                     'age': result[0][3], 'img': ""}, status=200)
 
-            return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
-                                 'age': result[0][3]}, status=200)
+            else:
+                return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
+                                 'age': result[0][3], 'img': result[0][4]}, status=200)
         else:
             print("실패")
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
@@ -64,6 +71,8 @@ def calculate(request):
         default_storage.save(str(file), ContentFile(file.read()))
 
         foods, img, leng = yolo.process(str(file))
+
+        print(foods)
 
         if leng == 0:
             return JsonResponse({'code': '0001', 'img': img}, status=200)
@@ -92,6 +101,8 @@ def food(request):
         db.commit()
         db.close()
 
+        print(result)
+
         if len(result) == 0:
             return JsonResponse({"code": "0001"})
         else:
@@ -101,8 +112,8 @@ def food(request):
 @csrf_exempt
 def datainfo(request):
     if request.method == 'POST':
-        datamod.agecalavglist
-        datamod.monthavgcal
+        print(datamod.agecalavglist)
+        print(datamod.monthavgcal)
 
         return JsonResponse({'code': '0000', 'agecalavglist':datamod.agecalavglist, 'monthavgcal':datamod.monthavgcal}, status=200)
 
@@ -177,47 +188,76 @@ def userinfo(request):
             charset='utf8'
         )
         cursor = db.cursor()
-        sql = "select tim, calorie from user_food where user = %s"
+        sql = "select tim, calorie, carbo, protein, fat from user_food where user = %s"
         cursor.execute(sql, id)
         result = cursor.fetchall()
 
         userdaycal15 = {}  # 날짜/ 칼로리
         userdaycal30 = {}
+
+        userdaycarbo15 = {}
+        userdaycarbo30 = {}
+
+        userdaypro15 = {}
+        userdaypro30 = {}
+
+        userdayfat15 = {}
+        userdayfat30 = {}
+
         now = datetime.datetime.now()
 
         for i in range(1, 16):
             tmp = now - datetime.timedelta(days=i)
             da = tmp.strftime(("%Y%m%d"))
             userdaycal15[da] = 0
+            userdaycarbo15[da] = 0
+            userdaypro15[da] = 0
+            userdayfat15[da] = 0
 
         for i in range(1, 31):
             tmp = now - datetime.timedelta(days=i)
             da = tmp.strftime(("%Y%m%d"))
             userdaycal30[da] = 0
+            userdaycarbo30[da] = 0
+            userdaypro30[da] = 0
+            userdayfat30[da] = 0
 
         for i in result:
             a = str(i[0])
             date = a[:8]
             if (date in userdaycal15):
                 userdaycal15[date] += i[1]
+                userdaycarbo15[date] += i[2]
+                userdaypro15[date] += i[3]
+                userdayfat15[date] += i[4]
         tmp1 = list(userdaycal15)
         tmp2 = list(userdaycal15.values())
+        tmp3 = list(userdaycarbo15.values())
+        tmp4 = list(userdaypro15.values())
+        tmp5 = list(userdayfat15.values())
         userdaycallist15 = []  # 리스트로 만들기
         for i in range(len(tmp1)):
-            userdaycallist15.append([tmp1[i], tmp2[i]])
+            userdaycallist15.append([tmp1[i], tmp2[i], tmp3[i], tmp4[i], tmp5[i]])
         print(userdaycallist15)
+
         userdaycallist30 = []
         for i in result:
             a = str(i[0])
             date = a[:8]
             if (date in userdaycal30):
                 userdaycal30[date] += i[1]
+                userdaycarbo30[date] += i[2]
+                userdaypro30[date] += i[3]
+                userdayfat30[date] += i[4]
+
         tmp1 = list(userdaycal30)
         tmp2 = list(userdaycal30.values())
+        tmp3 = list(userdaycarbo30.values())
+        tmp4 = list(userdaypro30.values())
+        tmp5 = list(userdayfat30.values())
 
         for i in range(len(tmp1)):
-            userdaycallist30.append([tmp1[i], tmp2[i]])
-
+            userdaycallist30.append([tmp1[i], tmp2[i], tmp3[i], tmp4[i], tmp5[i]])
         print(userdaycallist30)
 
         db.commit()
@@ -304,6 +344,8 @@ def usermod(request):
         height = request.POST.get('height', 0)
         weight = request.POST.get('weight', 0)
         age = request.POST.get('age', 0)
+        img = request.POST.get('img', '')
+        print(img)
 
         db = pymysql.connect(
             user='root',
@@ -313,10 +355,11 @@ def usermod(request):
             charset='utf8'
         )
         cursor = db.cursor()
-        sql = "update user set sex = %s, height = %s, weight = %s, age = %s where username = %s"
+        sql = "update user set sex = %s, height = %s, weight = %s, age = %s, img = %s where username = %s"
         sql2 = "update user_food set sex = %s, height = %s, weight = %s, age = %s where user = %s"
+
         try:
-            cursor.execute(sql, (sex, height, weight, age, id))
+            cursor.execute(sql, (sex, height, weight, age, img, id))
             cursor.execute(sql2, (sex, height, weight, age, id))
             db.commit()
             db.close()

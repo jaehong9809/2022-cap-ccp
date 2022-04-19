@@ -62,6 +62,8 @@ class LoginPage : AppCompatActivity() {
                         intent.putExtra("weight", login?.weight)
                         intent.putExtra("height", login?.height)
                         intent.putExtra("age", login?.age)
+                        intent.putExtra("img", login?.img)
+
                         startActivity(intent)
                     }
                     else{

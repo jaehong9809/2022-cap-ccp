@@ -62,7 +62,7 @@ class ModifyPage : AppCompatActivity() {
             setweight=edt_weight.text.toString().toInt()
             setage=edt_age.text.toString().toInt()
 
-            modify.mod(setid, setsex, setheight, setweight, setage).enqueue(object: Callback<User>{
+            modify.mod(setid, setsex, setheight, setweight, setage, setimguri).enqueue(object: Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     var result = response.body()
                     if (result?.code == "0000"){
@@ -91,12 +91,14 @@ class ModifyPage : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode==Activity.RESULT_OK){
+        if(resultCode== RESULT_OK){
             if(requestCode==OPEN_GALLERY){
                 var currentImageUrl: Uri?=data?.data
                 try{
-                    val bitmap= MediaStore.Images.Media.getBitmap(contentResolver, currentImageUrl)
-                    imv1.setImageBitmap(bitmap)
+                    var uri=data?.data
+                    imv1.setImageURI(uri)
+                    setimguri=uri.toString()
+                    println(setimguri)
                 }catch (e:Exception){
                     e.printStackTrace()
                 }

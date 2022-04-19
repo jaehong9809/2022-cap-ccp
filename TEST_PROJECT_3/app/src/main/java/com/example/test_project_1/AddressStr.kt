@@ -7,3 +7,4 @@ var setsex = ""
 var setweight = 0
 var setheight = 0
 var setage = 0
+var setimguri=""

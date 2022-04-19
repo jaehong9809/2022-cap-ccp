@@ -77,7 +77,6 @@ class CameraPage: AppCompatActivity() {
             var imageView: ImageView = findViewById(R.id.imageView)
             var btn: Button = findViewById(R.id.btn)
 
-
             picture.requestPicture(image).enqueue(object : Callback<Cal> {
                 override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
                     var result = response.body()

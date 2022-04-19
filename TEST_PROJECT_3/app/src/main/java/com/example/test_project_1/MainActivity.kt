@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setweight = inten.getIntExtra("weight", 0)
         setheight = inten.getIntExtra("height", 0)
         setage = inten.getIntExtra("age", 0)
+        setimguri = inten.getStringExtra("img").toString()
 
         changeFragment(calfrag)
         FragmentPage()

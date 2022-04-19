@@ -41,11 +41,21 @@ class UserPage : Fragment() {
     lateinit var heighttv:TextView
     lateinit var username:TextView
     lateinit var modifybt:Button
-    lateinit var advtv:TextView
+    lateinit var advtv1:TextView
+    lateinit var advtv2:TextView
+    lateinit var advtv3:TextView
+    lateinit var advtv4:TextView
     lateinit var advimv:ImageView
+    lateinit var userimg:ImageView
     var standardcal=0
+    var standardcarbo=0
+    var standardpro=0
+    var standardfat=0
     var day30totalcal=0
-
+    var day30totalcarbo=0
+    var day30totalpro=0
+    var day30totalfat=0
+    var realdtcnt=0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,15 +79,25 @@ class UserPage : Fragment() {
         daesatv=view.findViewById(R.id.daesatv)
         heighttv=view.findViewById(R.id.heighttv)
         username=view.findViewById(R.id.username)
-        advtv=view.findViewById(R.id.advtv1)
+        advtv1=view.findViewById(R.id.advtv1)
+        advtv2=view.findViewById(R.id.advtv2)
+        advtv3=view.findViewById(R.id.advtv3)
+        advtv4=view.findViewById(R.id.advtv4)
+
         advimv=view.findViewById(R.id.advimv1)
         modifybt=view.findViewById(R.id.modifybt)
+        userimg=view.findViewById(R.id.userimg)
         var userone=userData(id,user_age, user_weight, user_sex, 1700, user_height)
         var qq=((userone.weight)/((userone.height*0.01)*(userone.height*0.01))).toInt()
+        when(qq){
+            in 0..18 ->daesatv.text="저체중"
+            in 18..23 ->daesatv.text="정상체중"
+            in 23..25 ->daesatv.text="과체중"
+            in 25..100 ->daesatv.text="비만"
+        }
         agetv.text=Integer.toString(userone.age)
         weight.text=Integer.toString(userone.weight)
         sextv.text=userone.sex
-        daesatv.text=Integer.toString(userone.daesa)
         heighttv.text=Integer.toString(userone.height)
         username.text=userone.name
         bmitv.text=qq.toString()
@@ -87,6 +107,7 @@ class UserPage : Fragment() {
             var intent = Intent(getActivity(), ModifyPage::class.java)
             startActivityForResult(intent, 0)
         }
+
 
         var retro = Retro()
         var retrofit = retro.retrofit
@@ -116,11 +137,19 @@ class UserPage : Fragment() {
                     makechart(chart1, entries15, 15)                       //그래프 생성
                     var entries30 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     index=0
+
                     for (i in day30){
                         index++
                         var str=i[0].substring(4,6)+"/"+i[0].substring(6, 8)
                         var calorie=i[1].toInt()
+                        var carbo=i[2].toInt()
+                        var protein=i[3].toInt()
+                        var fat=i[4].toInt()
+                        if(calorie!=0)realdtcnt++
                         day30totalcal+=calorie
+                        day30totalcarbo+=carbo
+                        day30totalpro+=protein
+                        day30totalfat+=fat
                         var tmp:dayCalorie
                         if(index%3==0){
                             tmp= dayCalorie(str, calorie)
@@ -131,6 +160,7 @@ class UserPage : Fragment() {
                         entries30.add(tmp)
                     }
                     makechart(chart2, entries30, 30)                       //그래프 생성
+
                     if(user_sex.equals("M")){
                         standardcal=when(user_age){
                             in 1..2 -> 900
@@ -145,6 +175,18 @@ class UserPage : Fragment() {
                             in 65..74-> 2000
                             in 75..150->1900
                             else ->1900
+                        }
+                        standardpro=when(user_age){
+                            in 0..5 ->25
+                            in 6..8 ->35
+                            in 9..11->50
+                            in 12..14->60
+                            in 15..18->65
+                            in 19..29->65
+                            in 30..49->65
+                            in 50..64->65
+                            in 65..74->60
+                            else ->60
                         }
                     }
                     else{
@@ -162,19 +204,65 @@ class UserPage : Fragment() {
                             in 75..150->1500
                             else ->1900
                         }
+                        standardpro=when(user_age){
+                            in 0..5 ->20
+                            in 6..8 ->30
+                            in 9..11->40
+                            in 12..14->50
+                            in 15..18->55
+                            in 19..29->50
+                            in 30..49->50
+                            in 50..64->50
+                            in 65..74->50
+                            else ->50
+                        }
                     }
-                    standardcal=(standardcal*30)
-                    if(day30totalcal>standardcal+1000){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv.text="잘못된 식습관입니다! 칼로리를 조절하시오!"
+                    var avgday30cal=0
+                    var avgday30carbo=0
+                    var avgday30pro=0
+                    var avgday30fat=0
+
+                    if(realdtcnt!=0){
+                        avgday30cal= day30totalcal/realdtcnt
+                        avgday30carbo=day30totalcarbo/realdtcnt
+                        avgday30pro=day30totalpro/realdtcnt
+                        avgday30fat=day30totalfat/realdtcnt
+                    }
+                    if(avgday30cal>standardcal+10){                 //기준+1000 보다 큼 -> 잘못됨
+                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
                         advimv.setImageResource(R.drawable.star_bad)
                     }
-                    else if((day30totalcal>standardcal-1000)&&(day30totalcal<standardcal+1000)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv.text="좋은 식습관입니다! 지금을 유지하십시오!"
+                    else if((avgday30cal>standardcal-10)&&(avgday30cal<standardcal+10)){    //기준-1000 < <기준 +1000 사이 -> good
+                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
                         advimv.setImageResource(R.drawable.star_good)
                     }
-                    else if(day30totalcal<standardcal-1000){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv.text="당신은 완벽한 다이어트를 하고있습니다! 완벽한 몸매에 도전하시오!"
+                    else if(avgday30cal<standardcal-10){                //기준 -1000보다 작음 -> 아주 굳
+                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
                         advimv.setImageResource(R.drawable.star_verygood)
+                    }
+                    standardcarbo=when(user_age){
+                        in 0..5 -> 60
+                        in 6..11 -> 90
+                        else -> 130
+                    }
+                    if(avgday30carbo>standardcarbo+10){                 //기준+1000 보다 큼 -> 잘못됨
+                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                    }
+                    else if((avgday30carbo>standardcarbo-10)&&(avgday30carbo<standardcarbo+10)){    //기준-1000 < <기준 +1000 사이 -> good
+                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                    }
+                    else if(avgday30carbo<standardcarbo-10){                //기준 -1000보다 작음 -> 아주 굳
+                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                    }
+
+                    if(avgday30pro>standardpro+10){                 //기준+1000 보다 큼 -> 잘못됨
+                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
+                    }
+                    else if((avgday30pro>standardpro-10)&&(avgday30pro<standardpro+10)){    //기준-1000 < <기준 +1000 사이 -> good
+                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
+                    }
+                    else if(avgday30pro<standardpro-10){                //기준 -1000보다 작음 -> 아주 굳
+                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
                     }
                 }
                 else{
@@ -214,13 +302,20 @@ class UserPage : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode== Activity.RESULT_OK){
             var qq=((setweight)/((setheight*0.01)*(setheight*0.01))).toInt()
+            when(qq){
+                in 0..18 ->daesatv.text="저체중"
+                in 18..23 ->daesatv.text="정상"
+                in 23..25 ->daesatv.text="과체중"
+                in 25..100 ->daesatv.text="비만"
+            }
             agetv.text=Integer.toString(setage)
             weight.text=Integer.toString(setweight)
             sextv.text=setsex
             heighttv.text=Integer.toString(setheight)
             username.text=setid
+            userimg.setImageURI(Uri.parse(setimguri))
             bmitv.text=qq.toString()
-            }
+        }
     }
 
     fun makechart(chart1: LineChart, entries: ArrayList<dayCalorie>, daynum:Int){
