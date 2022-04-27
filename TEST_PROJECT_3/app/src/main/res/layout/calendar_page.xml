@@ -10,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#edfce8"
         android:layout_weight="3">
         <ImageView
             android:id="@+id/cal_pre"
@@ -59,7 +58,6 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:background="#edfce8"
         android:layout_weight="1"
         android:orientation="horizontal"
         android:layout_gravity="center"
@@ -85,7 +83,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#edfce8"
         android:layout_weight="1">
         <View
             android:id="@+id/maxbar"
@@ -127,7 +124,6 @@
         android:layout_height="0dp"
         android:layout_weight="8"
         android:gravity="bottom"
-        android:background="#edfce8"
         android:orientation="vertical">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyview"
@@ -139,7 +135,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#edfce8"
         android:orientation="horizontal"
         android:layout_weight="1">
         <Button

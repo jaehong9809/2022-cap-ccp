@@ -6,5 +6,4 @@ data class Login(
     var weight : Int,
     var height : Int,
     var age : Int,
-    var img : String
 )

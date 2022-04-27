@@ -11,7 +11,7 @@ interface LoginService {
     @FormUrlEncoded
     @POST("/login/")
     fun requestLogin(
-        @Field("userid") userid:String,
-        @Field("userpw") userpw:String
+        @Field("id") id:String,
+        @Field("password") password:String
     ) : Call<Login>
 }

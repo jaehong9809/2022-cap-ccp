@@ -6,15 +6,10 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface JoinService {
+interface IdCheck {
     @FormUrlEncoded
-    @POST("/join/")
-    fun requestJoin(
+    @POST("/check/")
+    fun idCheck(
         @Field("id") id:String,
-        @Field("password") password:String,
-        @Field("age") age:Int,
-        @Field("sex") sex:String,
-        @Field("height") height:Int,
-        @Field("weight") weight:Int
     ) : Call<Join>
 }

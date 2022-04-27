@@ -62,6 +62,7 @@ class CalendarPage : Fragment() {
     private lateinit var loadbtn: Button
     val REQUEST_GET_IMAGE = 105
     val REQUEST_CAMERA = 100
+    val REQUEST_ADD = 110
 
     private lateinit var maxbar: View
     private lateinit var todaybar: View
@@ -206,13 +207,14 @@ class CalendarPage : Fragment() {
         }
 
         addbtn.setOnClickListener {
-            var intent = Intent(requireContext(), AddPage::class.java)
+            var intent = Intent(getActivity(), AddPage::class.java)
             intent.putExtra("textId", textId)
             intent.putExtra("sex", sex)
             intent.putExtra("weight", weight)
             intent.putExtra("height", height)
             intent.putExtra("age", age)
-            startActivity(intent)
+            intent.putExtra("Adddate", daynum)
+            startActivityForResult(intent, REQUEST_ADD)
         }
 
         loadbtn.setOnClickListener {
@@ -240,7 +242,7 @@ class CalendarPage : Fragment() {
         if(resultCode == Activity.RESULT_OK){
             when(requestCode){
                 REQUEST_GET_IMAGE -> {
-                    foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
+                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
                         override fun onResponse(call: Call<Food>, response: Response<Food>) {
                             var food = response.body() as Food
                             if(food.code == "0000"){
@@ -269,7 +271,35 @@ class CalendarPage : Fragment() {
                 }
 
                 REQUEST_CAMERA -> {
-                    foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
+                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
+                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                            var food = response.body() as Food
+                            if(food.code == "0000"){
+                                mDatas.clear()
+                                for (f in food.foods){
+                                    mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                                }
+                                setbar(mDatas)
+                            }
+                            else{
+                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
+                                mDatas.clear()
+                            }
+                            CoroutineScope(Dispatchers.Main).launch{
+                                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                                foodrecyview.adapter=recyadapter
+                                val mLayoutManager = LinearLayoutManager(context)
+                                foodrecyview.layoutManager = mLayoutManager
+                                foodrecyview.setHasFixedSize(true)
+                            }
+                        }
+                        override fun onFailure(call: Call<Food>, t: Throwable) {
+                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+                REQUEST_ADD -> {
+                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
                         override fun onResponse(call: Call<Food>, response: Response<Food>) {
                             var food = response.body() as Food
                             if(food.code == "0000"){

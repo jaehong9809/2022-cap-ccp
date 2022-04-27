@@ -229,15 +229,15 @@ class UserPage : Fragment() {
                         avgday30fat=day30totalfat/realdtcnt
                     }
                     if(avgday30cal>standardcal+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 줄이기"
                         advimv.setImageResource(R.drawable.star_bad)
                     }
                     else if((avgday30cal>standardcal-10)&&(avgday30cal<standardcal+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 유지"
                         advimv.setImageResource(R.drawable.star_good)
                     }
                     else if(avgday30cal<standardcal-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv1.text="식단 칼로리:${avgday30cal} 권장 칼로리:${standardcal}"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 늘리기"
                         advimv.setImageResource(R.drawable.star_verygood)
                     }
                     standardcarbo=when(user_age){
@@ -246,23 +246,33 @@ class UserPage : Fragment() {
                         else -> 130
                     }
                     if(avgday30carbo>standardcarbo+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 줄이기"
                     }
                     else if((avgday30carbo>standardcarbo-10)&&(avgday30carbo<standardcarbo+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 유지 "
                     }
                     else if(avgday30carbo<standardcarbo-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv2.text="식단 탄수화물:${avgday30carbo} 권장 탄수화물:${standardcarbo}"
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 늘리기"
                     }
 
                     if(avgday30pro>standardpro+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 줄이기"
                     }
                     else if((avgday30pro>standardpro-10)&&(avgday30pro<standardpro+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 유지"
                     }
                     else if(avgday30pro<standardpro-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv3.text="식단 단백질:${avgday30pro} 권장 단백질:${standardpro}"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 늘리기"
+                    }
+                    standardfat=51
+                    if(avgday30fat>standardfat+10){                 //기준+1000 보다 큼 -> 잘못됨
+                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat} \n추천: 지방 줄이기"
+                    }
+                    else if((avgday30fat>standardfat-10)&&(avgday30fat<standardfat+10)){    //기준-1000 < <기준 +1000 사이 -> good
+                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat} \n추천: 유지"
+                    }
+                    else if(avgday30fat<standardfat-10){                //기준 -1000보다 작음 -> 아주 굳
+                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat}"
                     }
                 }
                 else{
@@ -313,7 +323,6 @@ class UserPage : Fragment() {
             sextv.text=setsex
             heighttv.text=Integer.toString(setheight)
             username.text=setid
-            userimg.setImageURI(Uri.parse(setimguri))
             bmitv.text=qq.toString()
         }
     }

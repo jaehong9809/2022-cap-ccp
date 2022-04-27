@@ -13,7 +13,7 @@ import datetime
 @csrf_exempt
 def join(request):
     if request.method == 'POST':
-        username = request.POST.get('username', '')
+        username = request.POST.get('id', '')
         password = request.POST.get('password', '')
         age = request.POST.get('age', 0)
         sex = request.POST.get('sex', '')
@@ -25,10 +25,20 @@ def join(request):
 
 
 @csrf_exempt
+def check(request):
+    if request.method == 'POST':
+        id = request.POST.get('id', '')
+        if MyUser.objects.filter(username=id).exists():
+            return JsonResponse({'code': '0001'}, status=200)
+        else:
+            return JsonResponse({'code': '0000'}, status=200)
+
+
+@csrf_exempt
 def login(request):
     if request.method == 'POST':
-        id = request.POST.get('userid', '')
-        pw = request.POST.get('userpw', '')
+        id = request.POST.get('id', '')
+        pw = request.POST.get('password', '')
 
         result = authenticate(username=id, password=pw)
 
@@ -43,22 +53,15 @@ def login(request):
                 charset='utf8'
             )
             cursor = db.cursor()
-            sql = "select sex, weight, height, age, img from user where username = %s"
+            sql = "select sex, weight, height, age from user where username = %s"
             cursor.execute(sql, id)
             result = cursor.fetchall()
 
-            print(result[0][4])
-
             db.commit()
             db.close()
-            if result[0][4] is None:
-                return JsonResponse(
-                    {'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
-                     'age': result[0][3], 'img': ""}, status=200)
 
-            else:
-                return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
-                                 'age': result[0][3], 'img': result[0][4]}, status=200)
+            return JsonResponse({'code': '0000', 'sex': result[0][0], 'weight': result[0][1], 'height': result[0][2],
+                                 'age': result[0][3]}, status=200)
         else:
             print("실패")
             return JsonResponse({'code': '1001', 'msg': '로그인실패입니다.'}, status=200)
@@ -344,8 +347,6 @@ def usermod(request):
         height = request.POST.get('height', 0)
         weight = request.POST.get('weight', 0)
         age = request.POST.get('age', 0)
-        img = request.POST.get('img', '')
-        print(img)
 
         db = pymysql.connect(
             user='root',
@@ -355,11 +356,11 @@ def usermod(request):
             charset='utf8'
         )
         cursor = db.cursor()
-        sql = "update user set sex = %s, height = %s, weight = %s, age = %s, img = %s where username = %s"
+        sql = "update user set sex = %s, height = %s, weight = %s, age = %s where username = %s"
         sql2 = "update user_food set sex = %s, height = %s, weight = %s, age = %s where user = %s"
 
         try:
-            cursor.execute(sql, (sex, height, weight, age, img, id))
+            cursor.execute(sql, (sex, height, weight, age, id))
             cursor.execute(sql2, (sex, height, weight, age, id))
             db.commit()
             db.close()

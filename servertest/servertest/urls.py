@@ -20,6 +20,7 @@ from hee import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('join/', views.join),
+    path('check/', views.check),
     path('login/', views.login),
     path('calculate/', views.calculate),
     path('food/', views.food),

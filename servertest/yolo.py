@@ -28,7 +28,7 @@ def process(image):
     cursor = db.cursor()
 
     img = cv2.imread(image)
-    img = cv2.resize(img, None, fx=0.4, fy=0.4)
+    #img = cv2.resize(img, None, fx=0.4, fy=0.4)
     height, width, channels = img.shape
     blob = cv2.dnn.blobFromImage(img, 0.00392, (832, 832), (0, 0, 0), True, crop=False)
     net.setInput(blob)
@@ -41,7 +41,7 @@ def process(image):
             scores = detection[5:]
             class_id = np.argmax(scores)
             confidence = scores[class_id]
-            if confidence > 0.7:
+            if confidence > 0.2:
                 # Object detected
                 center_x = int(detection[0] * width)
                 center_y = int(detection[1] * height)
@@ -77,6 +77,7 @@ def process(image):
         cursor.execute(sql, foods[i])
         result = cursor.fetchall()
         food_names.append(result[0][0])
+
 
     img_str = base64.b64encode(cv2.imencode('.jpg', img)[1]).decode()
 

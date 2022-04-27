@@ -8,10 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import com.example.test_project_1.login.LoginService
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,7 +16,7 @@ import retrofit2.Response
 
 class ModifyPage : AppCompatActivity() {
     private val OPEN_GALLERY=1
-    lateinit var edt_id:EditText
+    lateinit var edt_id: TextView
     lateinit var edt_sex:EditText
     lateinit var edt_height:EditText
     lateinit var edt_weight:EditText
@@ -62,7 +59,7 @@ class ModifyPage : AppCompatActivity() {
             setweight=edt_weight.text.toString().toInt()
             setage=edt_age.text.toString().toInt()
 
-            modify.mod(setid, setsex, setheight, setweight, setage, setimguri).enqueue(object: Callback<User>{
+            modify.mod(setid, setsex, setheight, setweight, setage).enqueue(object: Callback<User>{
                 override fun onResponse(call: Call<User>, response: Response<User>) {
                     var result = response.body()
                     if (result?.code == "0000"){
@@ -97,8 +94,6 @@ class ModifyPage : AppCompatActivity() {
                 try{
                     var uri=data?.data
                     imv1.setImageURI(uri)
-                    setimguri=uri.toString()
-                    println(setimguri)
                 }catch (e:Exception){
                     e.printStackTrace()
                 }

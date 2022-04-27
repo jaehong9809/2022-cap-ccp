@@ -13,7 +13,6 @@ interface UserMod {
         @Field("sex") sex:String,
         @Field("height") height:Int,
         @Field("weight") weight:Int,
-        @Field("age") age:Int,
-        @Field("img") img:String
+        @Field("age") age:Int
     ) : Call<User>
 }

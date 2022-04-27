@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#edfce8"
     android:orientation="vertical"
     tools:context=".ModifyPage">
     <LinearLayout
@@ -57,21 +56,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="이름"
+                android:text="ID"
                 android:gravity="center"
                 android:textSize="20dp"
                 android:background="@drawable/edge"
                 android:layout_marginRight="10dp"
                 ></TextView>
-            <EditText
-
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
                 android:textSize="20dp"
                 android:id="@+id/ed0"
                 android:background="@drawable/edge"
-                ></EditText>
+                ></TextView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

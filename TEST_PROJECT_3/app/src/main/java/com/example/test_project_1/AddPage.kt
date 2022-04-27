@@ -1,5 +1,6 @@
 package com.example.test_project_1
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -94,7 +95,7 @@ class AddPage : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected (parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                adddate = cyear*100000 + (cmonth+1)*1000 + cday*10
+                adddate = intent.getIntExtra("Adddate", 0) * 10
                 adddate += position
             }
         }
@@ -149,6 +150,8 @@ class AddPage : AppCompatActivity() {
                     }
                 })
             }
+            var outIntent = Intent(applicationContext, CalendarPage::class.java)
+            setResult(Activity.RESULT_OK, outIntent)
             finish()
         }
     }

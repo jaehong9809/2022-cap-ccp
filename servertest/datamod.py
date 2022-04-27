@@ -81,8 +81,8 @@ for i in everytotalcalorie:
 for i in monthavgcal:
     if(i[2]!=0):
         i[1]=int(i[1]/i[2])
-print(everytotalcalorie)
-print(abcd)
+#print(everytotalcalorie)
+#print(abcd)
 print(monthavgcal)          #이녀석 리재홍한테 보내기
 age10list=[]        #10~80대 한끼 평균 칼로리 리스트
 age20list=[]
