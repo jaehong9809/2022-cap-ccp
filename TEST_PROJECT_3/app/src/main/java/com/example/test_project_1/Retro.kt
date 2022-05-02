@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class Retro{
     var retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.35.251:8000")
+        .baseUrl("http://:8000")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 }

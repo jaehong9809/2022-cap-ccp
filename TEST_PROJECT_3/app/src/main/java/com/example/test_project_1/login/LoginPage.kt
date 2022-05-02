@@ -14,6 +14,7 @@ import com.example.test_project_1.join.JoinPage
 import com.example.test_project_1.MainActivity
 import com.example.test_project_1.R
 import com.example.test_project_1.Retro
+import kotlinx.coroutines.CoroutineScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

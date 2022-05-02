@@ -11,6 +11,9 @@ import com.example.test_project_1.R
 import com.example.test_project_1.Retro
 import com.example.test_project_1.login.Login
 import com.example.test_project_1.login.LoginPage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -103,23 +106,25 @@ class JoinPage : AppCompatActivity() {
                     if(password != password2){
                         Toast.makeText(applicationContext, "패스워드 확인해", Toast.LENGTH_SHORT).show()
                     }else{
-                        joinService.requestJoin(id, password, age, sex, height, weight).enqueue(object:Callback<Join>{
-                            override fun onResponse(call: Call<Join>, response: Response<Join>) {
-                                var join = response.body()
-                                if (join?.code == "0000"){
-                                    Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                                    var intent= Intent(applicationContext, LoginPage::class.java)
-                                    startActivity(intent)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            joinService.requestJoin(id, password, age, sex, height, weight).enqueue(object:Callback<Join>{
+                                override fun onResponse(call: Call<Join>, response: Response<Join>) {
+                                    var join = response.body()
+                                    if (join?.code == "0000"){
+                                        Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                                    }
+                                    else{
+                                        Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-                                else{
-                                    Toast.makeText(applicationContext, "회원가입 실패", Toast.LENGTH_SHORT).show()
-                                }
-                            }
 
-                            override fun onFailure(call: Call<Join>, t: Throwable) {
-                                Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
-                            }
-                        })
+                                override fun onFailure(call: Call<Join>, t: Throwable) {
+                                    Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                        }
+                        var intent= Intent(applicationContext, LoginPage::class.java)
+                        startActivity(intent)
                     }
                 }
             }
