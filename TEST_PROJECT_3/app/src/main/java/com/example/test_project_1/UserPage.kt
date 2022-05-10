@@ -1,7 +1,9 @@
 package com.example.test_project_1
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
 import android.graphics.Color
 import android.media.Image
 import android.net.Uri
@@ -18,9 +20,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +60,24 @@ class UserPage : Fragment() {
     var day30totalpro=0
     var day30totalfat=0
     var realdtcnt=0
+
+    class MonthlyMarkerView : MarkerView {
+        lateinit var tvContent: TextView // marker
+        constructor(context: Context?, layoutResource: Int) : super(context, layoutResource)
+        {
+            tvContent = findViewById(R.id.test_marker_view)
+        } // draw override를 사용해 marker의 위치 조정 (bar의 상단 중앙)
+        override fun draw(canvas: Canvas?) {
+            canvas!!.translate(-(width / 2).toFloat(), -height.toFloat() )
+            super.draw(canvas)
+        } // entry를 content의 텍스트에 지정
+        override fun refreshContent(e: Entry?, highlight: Highlight?) {
+            tvContent.text = e?.y.toString()+"\n"+"가나다라"
+            super.refreshContent(e, highlight)
+        }
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -135,6 +157,8 @@ class UserPage : Fragment() {
                         entries15.add(tmp)
                     }
                     makechart(chart1, entries15, 15)                       //그래프 생성
+                    val marker1=MonthlyMarkerView(context, layoutResource = R.layout.tvcontent)
+                    chart1.marker=marker1
                     var entries30 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     index=0
 
@@ -160,7 +184,8 @@ class UserPage : Fragment() {
                         entries30.add(tmp)
                     }
                     makechart(chart2, entries30, 30)                       //그래프 생성
-
+                    val marker2=MonthlyMarkerView(context, layoutResource = R.layout.tvcontent)
+                    chart2.marker=marker2
                     if(user_sex.equals("M")){
                         standardcal=when(user_age){
                             in 1..2 -> 900
@@ -285,12 +310,6 @@ class UserPage : Fragment() {
             }
 
         })
-
-
-        /*  modifybt.setOnClickListener {
-              Toast.makeText(requireContext(), "수정어케하지", Toast.LENGTH_LONG).show()
-          }*/
-
 
         var cal= Calendar.getInstance()      //오늘날짜
         var cmonth=cal.get(Calendar.MONTH)
