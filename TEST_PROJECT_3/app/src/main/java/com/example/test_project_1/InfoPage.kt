@@ -188,8 +188,6 @@ class InfoPage : Fragment() {
 
         })
 
-
-        //------------------------통신-----------------------------------by heegang
         dataInfo.searchData().enqueue(object : Callback<Data> {
             override fun onResponse(call: Call<Data>, response: Response<Data>) {
                 var result = response.body()
@@ -200,8 +198,6 @@ class InfoPage : Fragment() {
 
                 } else
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-
-
 
                 sp1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

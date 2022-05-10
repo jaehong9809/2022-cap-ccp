@@ -124,27 +124,26 @@ class GalleryPage: AppCompatActivity() {
                                 var age = intent.getIntExtra("age", 0)
                                 var savefood = retrofit.create(SaveFood::class.java)
 
-                                CoroutineScope(Dispatchers.IO).launch{
-                                    for(i in 0 until foods.size){
-                                        savefood.saveFood(foods[i], time.toInt(), calculated_weight[i], id, sex, user_weight, height, age).enqueue(object: Callback<Food> {
-                                            override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                                                var food = response.body() as Food
-                                                if(food.code == "0000"){
-                                                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
-                                                }
-                                                else{
-                                                    Toast.makeText(applicationContext, "없어", Toast.LENGTH_SHORT).show()
-                                                }
+
+                                for(i in 0 until foods.size){
+                                    savefood.saveFood(foods[i], time.toInt(), calculated_weight[i], id, sex, user_weight, height, age).enqueue(object: Callback<Food> {
+                                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                                            var food = response.body() as Food
+                                            if(food.code == "0000"){
+                                                Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                                                var outIntent = Intent(applicationContext, CalendarPage::class.java)
+                                                setResult(Activity.RESULT_OK, outIntent)
+                                                finish()
                                             }
-                                            override fun onFailure(call: Call<Food>, t: Throwable) {
-                                                Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                                            else{
+                                                Toast.makeText(applicationContext, "없어", Toast.LENGTH_SHORT).show()
                                             }
-                                        })
-                                    }
+                                        }
+                                        override fun onFailure(call: Call<Food>, t: Throwable) {
+                                            Toast.makeText(applicationContext, "통신 실패", Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
                                 }
-                                var outIntent = Intent(applicationContext, CalendarPage::class.java)
-                                setResult(Activity.RESULT_OK, outIntent)
-                                finish()
                             }
                         }
                         else {

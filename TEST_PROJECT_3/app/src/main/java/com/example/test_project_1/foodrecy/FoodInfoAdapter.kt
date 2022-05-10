@@ -61,13 +61,10 @@ class FoodInfoAdapter(val context: Context, val datalist: ArrayList<FoodModel>, 
                             println("success")
                         }
                     }
-
                     override fun onFailure(call: Call<Food>, t: Throwable) {
                         println("failed")
                     }
-
                 })
-
             }
         }
     }

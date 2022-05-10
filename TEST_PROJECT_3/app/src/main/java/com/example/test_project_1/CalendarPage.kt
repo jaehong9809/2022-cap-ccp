@@ -135,19 +135,19 @@ class CalendarPage : Fragment() {
                     for (f in food.foods){
                         mDatas.add(FoodModel( f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                     }
-                    setbar(mDatas)
+                    setbar(food.daycal)
                 }
                 else{
                     Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                     mDatas.clear()
                 }
-                CoroutineScope(Dispatchers.Main).launch {
-                    val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                    foodrecyview.adapter=recyadapter
-                    val mLayoutManager = LinearLayoutManager(context)
-                    foodrecyview.layoutManager = mLayoutManager
-                    foodrecyview.setHasFixedSize(true)
-                }
+
+                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                foodrecyview.adapter=recyadapter
+                val mLayoutManager = LinearLayoutManager(context)
+                foodrecyview.layoutManager = mLayoutManager
+                foodrecyview.setHasFixedSize(true)
+
             }
 
             override fun onFailure(call: Call<Food>, t: Throwable) {
@@ -155,6 +155,7 @@ class CalendarPage : Fragment() {
             }
 
         })
+
         meal_time.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
                 R.id.breakfast -> time = "0"
@@ -170,20 +171,18 @@ class CalendarPage : Fragment() {
                         for (f in food.foods){
                             mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                         }
-                        setbar(mDatas)
+                        setbar(food.daycal)
                     }
                     else{
                         Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                         mDatas.clear()
-                        setbar(mDatas)
+                        setbar(food.daycal)
                     }
-                    CoroutineScope(Dispatchers.Main).launch{
-                        val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                        foodrecyview.adapter=recyadapter
-                        val mLayoutManager = LinearLayoutManager(context)
-                        foodrecyview.layoutManager = mLayoutManager
-                        foodrecyview.setHasFixedSize(true)
-                    }
+                    val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                    foodrecyview.adapter=recyadapter
+                    val mLayoutManager = LinearLayoutManager(context)
+                    foodrecyview.layoutManager = mLayoutManager
+                    foodrecyview.setHasFixedSize(true)
                 }
                 override fun onFailure(call: Call<Food>, t: Throwable) {
                     Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
@@ -228,12 +227,12 @@ class CalendarPage : Fragment() {
 
             startActivityForResult(intent, REQUEST_GET_IMAGE)
         }
-
+        /*
         val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
         foodrecyview.adapter=recyadapter
         val mLayoutManager = LinearLayoutManager(context)
         foodrecyview.layoutManager = mLayoutManager
-        foodrecyview.setHasFixedSize(true)
+        foodrecyview.setHasFixedSize(true)*/
 
         return view
     }
@@ -250,19 +249,19 @@ class CalendarPage : Fragment() {
                                 for (f in food.foods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(mDatas)
+                                setbar(food.daycal)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
                             }
-                            CoroutineScope(Dispatchers.Main).launch{
-                                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                                foodrecyview.adapter=recyadapter
-                                val mLayoutManager = LinearLayoutManager(context)
-                                foodrecyview.layoutManager = mLayoutManager
-                                foodrecyview.setHasFixedSize(true)
-                            }
+
+                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                            foodrecyview.adapter=recyadapter
+                            val mLayoutManager = LinearLayoutManager(context)
+                            foodrecyview.layoutManager = mLayoutManager
+                            foodrecyview.setHasFixedSize(true)
+
                         }
                         override fun onFailure(call: Call<Food>, t: Throwable) {
                             Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
@@ -279,19 +278,19 @@ class CalendarPage : Fragment() {
                                 for (f in food.foods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(mDatas)
+                                setbar(food.daycal)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
                             }
-                            CoroutineScope(Dispatchers.Main).launch{
-                                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                                foodrecyview.adapter=recyadapter
-                                val mLayoutManager = LinearLayoutManager(context)
-                                foodrecyview.layoutManager = mLayoutManager
-                                foodrecyview.setHasFixedSize(true)
-                            }
+
+                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                            foodrecyview.adapter=recyadapter
+                            val mLayoutManager = LinearLayoutManager(context)
+                            foodrecyview.layoutManager = mLayoutManager
+                            foodrecyview.setHasFixedSize(true)
+
                         }
                         override fun onFailure(call: Call<Food>, t: Throwable) {
                             Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
@@ -307,19 +306,19 @@ class CalendarPage : Fragment() {
                                 for (f in food.foods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(mDatas)
+                                setbar(food.daycal)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
                                 mDatas.clear()
                             }
-                            CoroutineScope(Dispatchers.Main).launch{
-                                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                                foodrecyview.adapter=recyadapter
-                                val mLayoutManager = LinearLayoutManager(context)
-                                foodrecyview.layoutManager = mLayoutManager
-                                foodrecyview.setHasFixedSize(true)
-                            }
+
+                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
+                            foodrecyview.adapter=recyadapter
+                            val mLayoutManager = LinearLayoutManager(context)
+                            foodrecyview.layoutManager = mLayoutManager
+                            foodrecyview.setHasFixedSize(true)
+
                         }
                         override fun onFailure(call: Call<Food>, t: Throwable) {
                             Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
@@ -367,7 +366,7 @@ class CalendarPage : Fragment() {
                                 for (f in food.foods){
                                     mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
                                 }
-                                setbar(mDatas)
+                                setbar(food.daycal)
                             }
                             else{
                                 Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
@@ -388,7 +387,7 @@ class CalendarPage : Fragment() {
                 }
             }
             adapter.setData(calList)
-            setbar(mDatas)
+            //setbar(mDatas)
         }
 
         recyclerView.adapter = adapter
@@ -429,8 +428,8 @@ class CalendarPage : Fragment() {
         return ratewidth
     }
 
-    fun setbar(mDatas: ArrayList<FoodModel>) {
-        todayTotal = todaysum(mDatas, daynum)
+    fun setbar(daycal: Int) {
+        todayTotal = daycal
 
         todaykcal.setText(todayTotal.toString())
         goalkcal.setText(maxkcal.toString())
