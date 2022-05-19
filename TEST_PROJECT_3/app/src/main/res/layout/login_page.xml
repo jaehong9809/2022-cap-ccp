@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".login.LoginPage">
 
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/icon"
+        android:background="@drawable/edge5"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp">
+    </ImageView>
 
     <EditText
         android:id="@+id/ID"
@@ -14,7 +22,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="ID"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:layout_gravity="center"/>
 
     <EditText
@@ -27,10 +35,14 @@
         android:inputType="textPassword" />
 
     <Button
+        android:layout_marginTop="10dp"
         android:id="@+id/login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="@drawable/edge_green"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
         android:text="로그인" />
 
     <Button
@@ -38,6 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="회원가입"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/edge_green"
+        android:textColor="@color/white" />
 
 </LinearLayout>

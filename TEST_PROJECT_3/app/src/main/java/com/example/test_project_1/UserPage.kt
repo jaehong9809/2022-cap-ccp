@@ -60,23 +60,8 @@ class UserPage : Fragment() {
     var day30totalpro=0
     var day30totalfat=0
     var realdtcnt=0
-
-    class MonthlyMarkerView : MarkerView {
-        lateinit var tvContent: TextView // marker
-        constructor(context: Context?, layoutResource: Int) : super(context, layoutResource)
-        {
-            tvContent = findViewById(R.id.test_marker_view)
-        } // draw override를 사용해 marker의 위치 조정 (bar의 상단 중앙)
-        override fun draw(canvas: Canvas?) {
-            canvas!!.translate(-(width / 2).toFloat(), -height.toFloat() )
-            super.draw(canvas)
-        } // entry를 content의 텍스트에 지정
-        override fun refreshContent(e: Entry?, highlight: Highlight?) {
-            tvContent.text = e?.y.toString()+"\n"+"가나다라"
-            super.refreshContent(e, highlight)
-        }
-
-    }
+    var tmp_arr15=Array(15, {Array(5, {"0"})})
+    var tmp_arr30=Array(30, {Array(5, {"0"})})
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,6 +94,27 @@ class UserPage : Fragment() {
         advimv=view.findViewById(R.id.advimv1)
         modifybt=view.findViewById(R.id.modifybt)
         userimg=view.findViewById(R.id.userimg)
+
+        class MonthlyMarkerView : MarkerView {
+            lateinit var tvContent: TextView // marker
+            constructor(context: Context?, layoutResource: Int) : super(context, layoutResource)
+            {
+                tvContent = findViewById(R.id.test_marker_view)
+            } // draw override를 사용해 marker의 위치 조정 (bar의 상단 중앙)
+            override fun draw(canvas: Canvas?) {
+                canvas!!.translate(-(width / 2).toFloat(), -height.toFloat() )
+                super.draw(canvas)
+            } // entry를 content의 텍스트에 지정
+            override fun refreshContent(e: Entry?, highlight: Highlight?) {
+                val ind= e?.x?.toInt()!! -1
+
+                tvContent.text = "칼로리 :"+e?.y.toString()+"\n탄수화물:"+tmp_arr30[ind][2]+"\n단백질 :"+tmp_arr30[ind][3]+
+                        "\n지 방 :"+tmp_arr30[ind][3]
+                super.refreshContent(e, highlight)
+            }
+
+        }
+
         var userone=userData(id,user_age, user_weight, user_sex, 1700, user_height)
         var qq=((userone.weight)/((userone.height*0.01)*(userone.height*0.01))).toInt()
         when(qq){
@@ -140,7 +146,10 @@ class UserPage : Fragment() {
                 var result = response.body()
                 if(result?.code =="0000"){
                     var day15 = result.day15
+                    tmp_arr15=result.day15
                     var day30 = result.day30
+                    tmp_arr30=result.day30
+
                     var entries15 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     var index=0
                     for (i in day15){
@@ -159,6 +168,7 @@ class UserPage : Fragment() {
                     makechart(chart1, entries15, 15)                       //그래프 생성
                     val marker1=MonthlyMarkerView(context, layoutResource = R.layout.tvcontent)
                     chart1.marker=marker1
+
                     var entries30 =ArrayList<dayCalorie>()    //30일짜리 데이터 셋
                     index=0
 
@@ -254,15 +264,15 @@ class UserPage : Fragment() {
                         avgday30fat=day30totalfat/realdtcnt
                     }
                     if(avgday30cal>standardcal+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 줄이기"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장:${standardcal} \n추천: 칼로리 줄이기"
                         advimv.setImageResource(R.drawable.star_bad)
                     }
                     else if((avgday30cal>standardcal-10)&&(avgday30cal<standardcal+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 유지"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장:${standardcal} \n추천: 칼로리 유지"
                         advimv.setImageResource(R.drawable.star_good)
                     }
                     else if(avgday30cal<standardcal-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv1.text="식단 칼로리:${avgday30cal}, 권장 칼로리:${standardcal} \n추천: 칼로리 늘리기"
+                        advtv1.text="식단 칼로리:${avgday30cal}, 권장:${standardcal} \n추천: 칼로리 늘리기"
                         advimv.setImageResource(R.drawable.star_verygood)
                     }
                     standardcarbo=when(user_age){
@@ -271,33 +281,33 @@ class UserPage : Fragment() {
                         else -> 130
                     }
                     if(avgday30carbo>standardcarbo+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 줄이기"
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장:${standardcarbo} \n추천: 탄수화물 줄이기"
                     }
                     else if((avgday30carbo>standardcarbo-10)&&(avgday30carbo<standardcarbo+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 유지 "
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장:${standardcarbo} \n추천: 탄수화물 유지 "
                     }
                     else if(avgday30carbo<standardcarbo-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장 탄수화물:${standardcarbo} \n추천: 탄수화물 늘리기"
+                        advtv2.text="식단 탄수화물:${avgday30carbo}, 권장:${standardcarbo} \n추천: 탄수화물 늘리기"
                     }
 
                     if(avgday30pro>standardpro+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 줄이기"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장:${standardpro} \n추천: 단백질 줄이기"
                     }
                     else if((avgday30pro>standardpro-10)&&(avgday30pro<standardpro+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 유지"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장:${standardpro} \n추천: 단백질 유지"
                     }
                     else if(avgday30pro<standardpro-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv3.text="식단 단백질:${avgday30pro}, 권장 단백질:${standardpro} \n추천: 단백질 늘리기"
+                        advtv3.text="식단 단백질:${avgday30pro}, 권장:${standardpro} \n추천: 단백질 늘리기"
                     }
                     standardfat=51
                     if(avgday30fat>standardfat+10){                 //기준+1000 보다 큼 -> 잘못됨
-                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat} \n추천: 지방 줄이기"
+                        advtv4.text="식단 지방:${avgday30fat}, 권장:${standardfat} \n추천: 지방 줄이기"
                     }
                     else if((avgday30fat>standardfat-10)&&(avgday30fat<standardfat+10)){    //기준-1000 < <기준 +1000 사이 -> good
-                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat} \n추천: 유지"
+                        advtv4.text="식단 지방:${avgday30fat}, 권장:${standardfat} \n추천: 유지"
                     }
                     else if(avgday30fat<standardfat-10){                //기준 -1000보다 작음 -> 아주 굳
-                        advtv4.text="식단 지방:${avgday30fat}, 권장 지방:${standardfat}"
+                        advtv4.text="식단 지방:${avgday30fat}, 권장:${standardfat} \n추천: 유지"
                     }
                 }
                 else{
@@ -387,7 +397,7 @@ class UserPage : Fragment() {
         }
 
         val ylaxis=chart1.axisLeft
-        ylaxis.axisMaximum=max.toFloat()
+        ylaxis.axisMaximum=(max+4000).toFloat()
         ylaxis.axisMinimum=0f
         ylaxis.setDrawAxisLine(false)
         ylaxis.setDrawGridLines(false)

@@ -212,7 +212,7 @@ class CalendarPage : Fragment() {
             intent.putExtra("weight", weight)
             intent.putExtra("height", height)
             intent.putExtra("age", age)
-            intent.putExtra("Adddate", daynum)
+            intent.putExtra("time", selectDay+time)
             startActivityForResult(intent, REQUEST_ADD)
         }
 

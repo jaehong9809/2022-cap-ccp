@@ -28,7 +28,6 @@ import kotlin.collections.ArrayList
 class AddPage : AppCompatActivity() {
     private lateinit var addname: Spinner
     private lateinit var addweight: Spinner
-    private lateinit var addunit: Spinner
     private lateinit var addtime: Spinner
 
     private lateinit var addbtn: Button
@@ -49,7 +48,6 @@ class AddPage : AppCompatActivity() {
 
         addname = findViewById(R.id.addname)
         addweight = findViewById(R.id.addweight)
-        addtime = findViewById(R.id.addtime)
         addbtn = findViewById(R.id.addbtn)
         savebtn = findViewById(R.id.savebtn)
 
@@ -73,6 +71,7 @@ class AddPage : AppCompatActivity() {
         var user_weight = intent.getIntExtra("weight", 0)
         var height = intent.getIntExtra("height", 0)
         var age = intent.getIntExtra("age", 0)
+        var time = intent.getStringExtra(("time")) as String
 
         var name = ""
         ArrayAdapter.createFromResource(this, R.array.dietname, android.R.layout.simple_spinner_item)
@@ -87,18 +86,6 @@ class AddPage : AppCompatActivity() {
             }
         }
 
-        ArrayAdapter.createFromResource(this, R.array.diettime, android.R.layout.simple_spinner_item)
-            .also { spiadapter -> spiadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                addtime.adapter = spiadapter
-            }
-        addtime.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected (parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                adddate = intent.getIntExtra("Adddate", 0) * 10
-                adddate += position
-            }
-        }
 
         var weight = ""
         ArrayAdapter.createFromResource(this, R.array.dietweight, android.R.layout.simple_spinner_item)
@@ -124,7 +111,7 @@ class AddPage : AppCompatActivity() {
                 mDatas.clear()
             }
             val kcal = getkcal(tDatas, name, weight.toFloat())
-            add(mDatas, name, adddate, weight, kcal)
+            add(mDatas, name, time.toInt(), weight, kcal)
             gettoast(succtext)
             addadapter.setData()
         }

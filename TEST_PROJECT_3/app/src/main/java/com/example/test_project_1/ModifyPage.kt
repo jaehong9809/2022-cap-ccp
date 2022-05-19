@@ -46,12 +46,6 @@ class ModifyPage : AppCompatActivity() {
         var retrofit = retro.retrofit
         var modify = retrofit.create(UserMod::class.java)
 
-        imv1.setOnClickListener{
-            val intent= Intent(Intent.ACTION_GET_CONTENT)
-            intent.setType("image/*")
-            startActivityForResult(intent, OPEN_GALLERY)
-        }
-
         okbt.setOnClickListener {
             setid=edt_id.text.toString()
             setsex=edt_sex.text.toString()
@@ -82,24 +76,6 @@ class ModifyPage : AppCompatActivity() {
             finish()
         }
 
-
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode== RESULT_OK){
-            if(requestCode==OPEN_GALLERY){
-                var currentImageUrl: Uri?=data?.data
-                try{
-                    var uri=data?.data
-                    imv1.setImageURI(uri)
-                }catch (e:Exception){
-                    e.printStackTrace()
-                }
-            }
-        }else{
-            Log.d("ActivityResult", "somethingwrong")
-        }
-    }
 }

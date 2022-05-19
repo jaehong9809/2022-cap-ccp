@@ -27,22 +27,6 @@ class FoodInfoAdapter(val context: Context, val datalist: ArrayList<FoodModel>, 
     inner class Holder(private val binding: FoodItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(foodModel: FoodModel) {
-            if(foodModel.food_time % 10 == 0) {
-                binding.fooddate.text="아침"
-            }
-            else if(foodModel.food_time % 10 == 1) {
-                binding.fooddate.text="점심"
-            }
-            else if(foodModel.food_time % 10 == 2) {
-                binding.fooddate.text="저녁"
-            }
-            else if(foodModel.food_time % 10 == 3) {
-                binding.fooddate.text="간식"
-            }
-            else {
-                binding.fooddate.text="야식"
-            }
-
             binding.foodNameinfo.text=foodModel.food_name
             binding.foodKcalinfo.text=foodModel.food_kcal.toString()
             binding.foodCarbinfo.text=foodModel.food_carb.toString()

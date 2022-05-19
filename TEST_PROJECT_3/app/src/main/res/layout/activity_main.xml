@@ -12,27 +12,40 @@
         android:orientation="horizontal" >
         <Button
             android:layout_width="0dp"
-            android:layout_margin="2dp"
+            android:layout_margin="7dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/edge_green"
+
             android:id="@+id/tocalpagebt"
             android:text="메인"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+
             ></Button>
         <Button
             android:layout_width="0dp"
-            android:layout_margin="2dp"
+            android:layout_margin="7dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/edge_green"
+
             android:id="@+id/touserpagebt"
             android:text="사용자 정보"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             ></Button>
         <Button
             android:layout_width="0dp"
-            android:layout_margin="2dp"
+            android:layout_margin="7dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/edge_green"
+
             android:id="@+id/toinfopagebt"
             android:text="데이터 정보"
+            android:textColor="@color/white"
+            android:textSize="16dp"
             ></Button>
     </LinearLayout>
 

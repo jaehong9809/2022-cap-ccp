@@ -7,22 +7,65 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="563dp" />
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinner1" />
+        android:layout_height="0dp"
+        android:layout_weight="8"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+        <TextView
+            android:text="이름: "
+            android:textColor="@android:color/background_dark"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <Spinner
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:textSize="25dp"
+            android:id="@+id/spinner1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+        <TextView
+            android:text="양    : "
+            android:textColor="@android:color/background_dark"
+            android:textSize="25dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:textSize="25dp"
+            android:id="@+id/spinner2" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn"
         android:layout_width="106dp"
         android:layout_height="50dp"
-        android:layout_gravity="bottom"
+        android:textSize="20dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="right"
+        android:textColor="@color/white"
+        android:background="@drawable/edge_green"
         android:text="저장" />
 
 </LinearLayout>
