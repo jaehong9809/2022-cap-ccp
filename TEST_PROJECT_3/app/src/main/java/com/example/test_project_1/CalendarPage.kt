@@ -127,34 +127,7 @@ class CalendarPage : Fragment() {
         dinner = view.findViewById(R.id.dinner)
         meal_time = view.findViewById(R.id.meal_time)
 
-        foodService.searchFood(today+time, textId).enqueue(object: Callback<Food>{
-            override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                var food = response.body() as Food
-                if(food.code == "0000"){
-                    mDatas.clear()
-                    for (f in food.foods){
-                        mDatas.add(FoodModel( f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                    }
-                    setbar(food.daycal)
-                }
-                else{
-                    Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                    mDatas.clear()
-                }
-
-                val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                foodrecyview.adapter=recyadapter
-                val mLayoutManager = LinearLayoutManager(context)
-                foodrecyview.layoutManager = mLayoutManager
-                foodrecyview.setHasFixedSize(true)
-
-            }
-
-            override fun onFailure(call: Call<Food>, t: Throwable) {
-                Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        getFoods(today+time, textId, mDatas)
 
         meal_time.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
@@ -162,32 +135,7 @@ class CalendarPage : Fragment() {
                 R.id.lunch -> time = "1"
                 R.id.dinner -> time = "2"
             }
-            foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
-                override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                    var food = response.body() as Food
-                    if(food.code == "0000"){
-                        Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
-                        mDatas.clear()
-                        for (f in food.foods){
-                            mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                        }
-                        setbar(food.daycal)
-                    }
-                    else{
-                        Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                        mDatas.clear()
-                        setbar(food.daycal)
-                    }
-                    val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                    foodrecyview.adapter=recyadapter
-                    val mLayoutManager = LinearLayoutManager(context)
-                    foodrecyview.layoutManager = mLayoutManager
-                    foodrecyview.setHasFixedSize(true)
-                }
-                override fun onFailure(call: Call<Food>, t: Throwable) {
-                    Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-                }
-            })
+            getFoods(selectDay+time, textId, mDatas)
         }
 
         setUpAdapter(mDatas, calrecyview)
@@ -241,92 +189,47 @@ class CalendarPage : Fragment() {
         if(resultCode == Activity.RESULT_OK){
             when(requestCode){
                 REQUEST_GET_IMAGE -> {
-                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
-                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                            var food = response.body() as Food
-                            if(food.code == "0000"){
-                                mDatas.clear()
-                                for (f in food.foods){
-                                    mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                                }
-                                setbar(food.daycal)
-                            }
-                            else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                                mDatas.clear()
-                            }
-
-                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                            foodrecyview.adapter=recyadapter
-                            val mLayoutManager = LinearLayoutManager(context)
-                            foodrecyview.layoutManager = mLayoutManager
-                            foodrecyview.setHasFixedSize(true)
-
-                        }
-                        override fun onFailure(call: Call<Food>, t: Throwable) {
-                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-                        }
-                    })
+                    getFoods(selectDay+time, textId, mDatas)
                 }
 
                 REQUEST_CAMERA -> {
-                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
-                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                            var food = response.body() as Food
-                            if(food.code == "0000"){
-                                mDatas.clear()
-                                for (f in food.foods){
-                                    mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                                }
-                                setbar(food.daycal)
-                            }
-                            else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                                mDatas.clear()
-                            }
-
-                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                            foodrecyview.adapter=recyadapter
-                            val mLayoutManager = LinearLayoutManager(context)
-                            foodrecyview.layoutManager = mLayoutManager
-                            foodrecyview.setHasFixedSize(true)
-
-                        }
-                        override fun onFailure(call: Call<Food>, t: Throwable) {
-                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-                        }
-                    })
+                    getFoods(selectDay+time, textId, mDatas)
                 }
                 REQUEST_ADD -> {
-                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
-                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                            var food = response.body() as Food
-                            if(food.code == "0000"){
-                                mDatas.clear()
-                                for (f in food.foods){
-                                    mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                                }
-                                setbar(food.daycal)
-                            }
-                            else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                                mDatas.clear()
-                            }
+                    getFoods(selectDay+time, textId, mDatas)
 
-                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                            foodrecyview.adapter=recyadapter
-                            val mLayoutManager = LinearLayoutManager(context)
-                            foodrecyview.layoutManager = mLayoutManager
-                            foodrecyview.setHasFixedSize(true)
-
-                        }
-                        override fun onFailure(call: Call<Food>, t: Throwable) {
-                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-                        }
-                    })
                 }
             }
         }
+    }
+
+    private fun getFoods(time: String, id: String, foodList: ArrayList<FoodModel>){
+        foodService.searchFood(time, id).enqueue(object: Callback<Food>{
+            override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                var food = response.body() as Food
+                if(food.code == "0000"){
+                    foodList.clear()
+                    for (f in food.foods){
+                        foodList.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
+                    }
+                    setbar(food.daycal)
+                }
+                else{
+                    foodList.clear()
+                    setbar(food.daycal)
+                }
+
+                val recyadapter= FoodInfoAdapter(requireContext(), foodList, id, time)
+                foodrecyview.adapter=recyadapter
+                val mLayoutManager = LinearLayoutManager(context)
+                foodrecyview.layoutManager = mLayoutManager
+                foodrecyview.setHasFixedSize(true)
+
+            }
+            override fun onFailure(call: Call<Food>, t: Throwable) {
+                Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setUpClickListener(calmonth: TextView) {
@@ -357,33 +260,7 @@ class CalendarPage : Fragment() {
                     goalkcal.setText(daynum.toString())
 
                     //test
-                    foodService.searchFood(selectDay+time, textId).enqueue(object: Callback<Food>{
-                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                            var food = response.body() as Food
-                            if(food.code == "0000"){
-                                Toast.makeText(getActivity(), "성공", Toast.LENGTH_SHORT).show()
-                                mDatas.clear()
-                                for (f in food.foods){
-                                    mDatas.add(FoodModel(f[0], f[1].toInt(), f[2].toInt(), f[3].toInt(), f[4].toInt(), f[5].toInt() ))
-                                }
-                                setbar(food.daycal)
-                            }
-                            else{
-                                Toast.makeText(getActivity(), "없어", Toast.LENGTH_SHORT).show()
-                                mDatas.clear()
-                            }
-                            val recyadapter= FoodInfoAdapter(requireContext(), mDatas, textId, selectDay+time)
-                            foodrecyview.adapter=recyadapter
-                            val mLayoutManager = LinearLayoutManager(context)
-                            foodrecyview.layoutManager = mLayoutManager
-                            foodrecyview.setHasFixedSize(true)
-                        }
-
-                        override fun onFailure(call: Call<Food>, t: Throwable) {
-                            Toast.makeText(getActivity(), "통신 실패", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
+                    getFoods(selectDay+time, textId, mDatas)
                 }
             }
             adapter.setData(calList)

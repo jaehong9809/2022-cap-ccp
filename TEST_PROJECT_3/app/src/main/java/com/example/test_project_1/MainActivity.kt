@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         tocalbt = findViewById(R.id.tocalpagebt)
 
         tocalbt.setOnClickListener {
+            println(calfrag::class.java.simpleName)
             changeFragment(calfrag)
         }
         touserbt.setOnClickListener {

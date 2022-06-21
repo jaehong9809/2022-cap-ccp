@@ -209,6 +209,7 @@ class InfoPage : Fragment() {
                                     val entries: ArrayList<PieEntry> = ArrayList()
                                     for (i in foods){
                                         entries.add(PieEntry((i[1].toInt()).toFloat(), i[0]))
+                                        println(i[0])
                                     }
                                     makepiechart(piechart1, entries)
                                 }

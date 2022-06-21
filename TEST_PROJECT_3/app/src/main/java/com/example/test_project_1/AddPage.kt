@@ -54,10 +54,57 @@ class AddPage : AppCompatActivity() {
         val addrecyview = findViewById<RecyclerView>(R.id.addrecyview)
 
         val tDatas: java.util.ArrayList<TestModel> = arrayListOf(
-            TestModel("냉면", 700, 72, 14, 4),
-            TestModel("돈까스", 200, 23, 34, 26),
-            TestModel("단팥죽", 100, 24, 4, 1),
-            TestModel("짬뽕밥", 900, 105, 29, 13)
+            TestModel(0, "쌀밥", 335),
+            TestModel(1, "김치볶음밥", 551),
+            TestModel(2, "카레라이스", 518),
+            TestModel(3, "참치김밥", 435),
+            TestModel(4, "일반김밥", 323),
+            TestModel(5, "라면", 451),
+            TestModel(6, "물냉면", 384),
+            TestModel(7, "비빔냉면", 499),
+            TestModel(8, "짜장면", 529),
+            TestModel(9, "짬뽕", 464),
+            TestModel(10, "군만두(1개)", 77),
+            TestModel(11, "미역국", 46),
+            TestModel(12, "뼈다귀해장국", 714),
+            TestModel(13, "된장찌개", 92),
+            TestModel(14, "김치찌개", 243),
+            TestModel(15, "닭갈비", 596),
+            TestModel(16, "불고기", 450),
+            TestModel(17, "떡볶이", 260),
+            TestModel(18, "치킨(1조각)", 249),
+            TestModel(19, "탕수육", 359),
+            TestModel(20, "단무지", 4),
+            TestModel(21, "김치", 11),
+            TestModel(22, "멸치볶음", 138),
+            TestModel(23, "깍두기", 16),
+            TestModel(24, "도토리묵", 148),
+            TestModel(25, "시금치", 34),
+            TestModel(26, "잡채", 291),
+            TestModel(27, "돈까스", 464),
+            TestModel(28, "족발", 583),
+            TestModel(29, "계란찜", 210),
+            TestModel(30, "주먹밥", 210),
+            TestModel(31, "볶음밥", 640),
+            TestModel(32, "비빔밥", 638),
+            TestModel(33, "새우볶음밥", 636),
+            TestModel(34, "오므라이스", 693),
+            TestModel(35, "불고기 덮밥", 728),
+            TestModel(36, "오징어 덮밥", 485),
+            TestModel(37, "제육덮밥", 950),
+            TestModel(38, "회덮밥", 594),
+            TestModel(39, "돼지국밥", 911),
+            TestModel(40, "소고기 무국", 123),
+            TestModel(41, "갈비", 240),
+            TestModel(42, "두부조림", 72),
+            TestModel(43, "계란말이", 193),
+            TestModel(44, "어묵볶음", 275),
+            TestModel(45, "소세지볶음", 471),
+            TestModel(46, "콩나물", 35),
+            TestModel(47, "닭칼국수", 663),
+            TestModel(48, "막국수", 799),
+            TestModel(49, "비빔국수", 512),
+            TestModel(50, "치킨무", 22)
         )
 
         var cal= Calendar.getInstance()
@@ -159,8 +206,7 @@ class AddPage : AppCompatActivity() {
         var kcal = 0
         tDatas.forEach {
             if(it.name == name) {
-                var thiskcal = (it.carb * 4) + (it.prot * 4) + (it.fat) * 9
-                kcal = (thiskcal * weight).toInt()
+                kcal = (it.kcal * weight).toInt()
             }
         }
         return kcal

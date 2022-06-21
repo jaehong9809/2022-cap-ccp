@@ -53,6 +53,8 @@ class GalleryPage: AppCompatActivity() {
         var spinner1: Spinner = findViewById(R.id.spinner1)
         var spinner2: Spinner = findViewById(R.id.spinner2)
 
+        val dialog = Loading(this)
+
         if (resultCode == Activity.RESULT_OK) {
             try{
                 var uri = data?.data
@@ -68,9 +70,10 @@ class GalleryPage: AppCompatActivity() {
 
                 val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
                 val image = MultipartBody.Part.createFormData("proFile", file.name, requestFile)
-
+                dialog.show()
                 picture.requestPicture(image).enqueue(object : Callback<Cal> {
                     override fun onResponse(call: Call<Cal>, response: Response<Cal>) {
+                        dialog.dismiss()
                         var result = response.body()
                         if (result?.code == "0000") {
                             Toast.makeText(applicationContext, "성공 ", Toast.LENGTH_SHORT).show()
@@ -91,8 +94,6 @@ class GalleryPage: AppCompatActivity() {
 
                             spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                                    println(spinner1.selectedItem)
-                                    println(spinner2.selectedItem)
                                     spinner2.setSelection(weightnum[spinner1.selectedItemPosition])
                                 }
                                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -100,10 +101,6 @@ class GalleryPage: AppCompatActivity() {
                             }
                             spinner2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                                    println(spinner1.selectedItemPosition)
-                                    println(spinner2.selectedItemPosition)
-                                    println(spinner1.selectedItem)
-                                    println(spinner2.selectedItem)
                                     calculated_weight[spinner1.selectedItemPosition] = spinner2.selectedItem.toString()
                                     weightnum[spinner1.selectedItemPosition] = spinner2.selectedItemPosition
                                     for(i in 0 until foods.size){
@@ -160,6 +157,7 @@ class GalleryPage: AppCompatActivity() {
                         }
                     }
                     override fun onFailure(call: Call<Cal>, t: Throwable) {
+                        dialog.dismiss()
                         Toast.makeText(applicationContext, "통신실패", Toast.LENGTH_SHORT).show()
                     }
                 })

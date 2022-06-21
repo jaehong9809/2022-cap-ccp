@@ -181,7 +181,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="나의 칼로리 흐름표"
+                android:text="시간에 따른 칼로리 분포"
                 android:textSize="16dp"
                 android:gravity="center"
                 android:layout_marginLeft="10dp"

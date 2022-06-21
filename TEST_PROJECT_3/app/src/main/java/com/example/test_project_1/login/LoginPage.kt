@@ -58,6 +58,10 @@ class LoginPage : AppCompatActivity() {
                 override fun onResponse(call: Call<Login>, response: Response<Login>) {
                     var login = response.body()
                     if(login?.code == "0000"){
+                        println(login?.sex)
+                        println(login?.age)
+                        println(login?.height)
+                        println(login?.weight)
                         Toast.makeText(applicationContext, "로그인 성공", Toast.LENGTH_SHORT).show()
                         var intent= Intent(applicationContext, MainActivity::class.java)
                         intent.putExtra("textId", textId)
