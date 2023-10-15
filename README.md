@@ -10,9 +10,6 @@
 
 
 ### 결과
+![aqwe1](https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/7413be43-399f-4dfc-90cb-714d8b7c395f)![qwer2](https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/4526e1ba-e0e9-4ce6-aff1-8fced4dc352a)![qwer3](https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/4def73e4-3e40-4ce9-a709-8f5b127e7682)
 
 
-
-![aqwe1](https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/95b829be-c483-4abf-93f3-3acc2b92c035)
-
-![KakaoTalk_20220531_223241070](https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/d6af18de-e5a2-40c3-9774-e76c93190289)
