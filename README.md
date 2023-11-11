@@ -1,4 +1,4 @@
-# Calorie Caculation Calendar
+# CCC(Calorie Caculation Calendar)
 
 ## 기간
 2022.01 ~ 2022.10
