@@ -15,7 +15,7 @@
 <img src="https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/4def73e4-3e40-4ce9-a709-8f5b127e7682" width="30%">
 
 ## 성과
-<img src="https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/07c2f035-36c0-46fa-a1ec-cc3393c8d226" width="30%">
+<img src="https://github.com/jaehong9809/2022-cap-ccp/assets/83408593/07c2f035-36c0-46fa-a1ec-cc3393c8d226" width="70%">
 
 
 
