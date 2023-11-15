@@ -33,3 +33,5 @@
     - Android(Kotlin)
 * 서버(servertest)
     - Python(Django)
+    - Object Detection Model(Yolo v3)
+    - DB(MySQL)
