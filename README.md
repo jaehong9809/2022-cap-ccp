@@ -31,6 +31,7 @@
 ## 구조
 * 클라이언트(TEST_PROJECT_3)
     - Android(Kotlin)
+    - REST API(Retrofit2)
 * 서버(servertest)
     - Python(Django)
     - Object Detection Model(Yolo v3)
